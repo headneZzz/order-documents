@@ -2,15 +2,15 @@
 <!-- Thymeleaf Namespace -->
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 
-<head>   
+<head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <link href="/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
     <title>Добавить дело</title>
 </head>
 
 <body>
-<div class="container">
+<div class="container" style="width: 100%; padding: 10%; margin: auto;">
     <br/>
     <h3>Добавить дело:</h3>
 
@@ -23,34 +23,33 @@
             </div>
             <input type="text" class="form-control" th:field="*{fund}"/>
         </div>
-         
+
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="2">Номер описи:</span>
             </div>
             <input type="text" class="form-control" th:field="*{register}"/>
         </div>
-         
+
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="3">Номер дела:</span>
             </div>
             <input type="text" class="form-control" th:field="*{affair}"/>
         </div>
+
         <br/>
         <input class="btn btn-primary" type="submit" value="Добавить">
-           
+
     </form>
     <br/>
-          
+
     <div th:if="${errorMessage}"
          th:utext="${errorMessage}"
-         style="color:red;font-style:italic;">
-        ...    
+         class="alert alert-danger" role="alert">
+        ...
     </div>
-      
+
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
 </body>
 </html>

@@ -28,7 +28,7 @@ public class MainController {
     }
 
     @RequestMapping(value = { "/affairsList" }, method = RequestMethod.GET)
-    public String personList(Model model) {
+    public String affairList(Model model) {
 
         model.addAttribute("affairs", affairs);
 
@@ -36,7 +36,7 @@ public class MainController {
     }
 
     @RequestMapping(value = { "/addAffair" }, method = RequestMethod.GET)
-    public String showAddPersonPage(Model model) {
+    public String showAddAffairPage(Model model) {
 
         AffairForm affairForm = new AffairForm();
         model.addAttribute("affairForm", affairForm);
@@ -45,7 +45,7 @@ public class MainController {
     }
 
     @RequestMapping(value = { "/addAffair" }, method = RequestMethod.POST)
-    public String savePerson(Model model, @ModelAttribute("affairForm") AffairForm affairForm) {
+    public String saveAffair(Model model, @ModelAttribute("affairForm") AffairForm affairForm) {
 
         String fund = affairForm.getFund();
         String register = affairForm.getRegister();

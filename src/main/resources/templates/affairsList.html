@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <link href="/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
     <title>Список дел</title>
 </head>
 
@@ -15,9 +15,13 @@
     <div class="jumbotron">
         <h2>Список дел</h2>
         <br/>
-        <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
+        <div style="display: inline;">
+            <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
+            <a class="btn btn-lg btn-secondary" href="#" role="button">Отправить</a>
+        </div>
         <br/>
     </div>
+
     <table class="table" border="1">
         <thead>
         <tr>
@@ -35,7 +39,5 @@
         </tbody>
     </table>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
 </body>
 </html>
