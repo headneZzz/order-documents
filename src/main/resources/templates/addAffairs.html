@@ -17,27 +17,9 @@
     <form th:action="@{/addAffair}"
           th:object="${affairForm}"
           method="POST">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="1">Номер фонда:</span>
-            </div>
-            <input type="text" class="form-control" th:field="*{fund}"/>
-        </div>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="2">Номер описи:</span>
-            </div>
-            <input type="text" class="form-control" th:field="*{register}"/>
-        </div>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="3">Номер дела:</span>
-            </div>
-            <input type="text" class="form-control" th:field="*{affair}"/>
-        </div>
-
+        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{fund}"/>
+        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{register}"/>
+        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{affair}"/>
         <br/>
         <input class="btn btn-primary" type="submit" value="Добавить">
 

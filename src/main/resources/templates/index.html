@@ -15,11 +15,28 @@
     <div class="jumbotron">
         <h2>Оцифровка</h2>
         <br/>
-        <div style="display: inline;">
-            <a th:href="@{/affairsList}" class="btn btn-lg btn-primary" role="button">Подготовить дела &raquo;</a>
-            <a href="#" class="btn btn-lg btn-secondary disabled" role="button" aria-disabled="true">Сделать выгрузку</a>
+        <form th:action="@{/}"
+              th:object="${personForm}"
+              method="POST">
+            <input type="text" aria-label="Last name" class="form-control" placeholder="Фамилия"
+                   th:field="*{lastName}"/>
+            <input type="text" aria-label="First name" class="form-control" placeholder="Имя"
+                   th:field="*{firstName}"/>
+            <input type="text" aria-label="Middle name" class="form-control" placeholder="Отчество"
+                   th:field="*{middleName}"/>
+            <br/>
+            <input class="btn btn-lg btn-primary" type="submit" value="Подготовить дела &raquo;">
+        </form>
+        <br/>
+        <div th:if="${errorMessage}"
+             th:utext="${errorMessage}"
+             class="alert alert-danger" role="alert">
+            ...
         </div>
     </div>
+</div>
+<div style="text-align: center;">
+    <a href="#" class="btn btn-lg btn-info disabled" role="button" aria-disabled="true">Сделать выгрузку</a>
 </div>
 </body>
 </html>
