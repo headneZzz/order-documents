@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AffairForm {
-    private String fund;
-    private String register;
+    private String fond;
+    private String op;
     private String affair;
 }

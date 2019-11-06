@@ -2,12 +2,7 @@
 <!-- Thymeleaf Namespace -->
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link href="/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
-    <title>Оцифровка</title>
-</head>
+<head th:replace="fragments/head :: head"></head>
 
 <body>
 <div class="container">
@@ -18,12 +13,14 @@
         <form th:action="@{/}"
               th:object="${personForm}"
               method="POST">
+            Читатель:
             <input type="text" aria-label="Last name" class="form-control" placeholder="Фамилия"
-                   th:field="*{lastName}"/>
+                   th:field="*{getPersonLastName}"/>
             <input type="text" aria-label="First name" class="form-control" placeholder="Имя"
-                   th:field="*{firstName}"/>
-            <input type="text" aria-label="Middle name" class="form-control" placeholder="Отчество"
-                   th:field="*{middleName}"/>
+                   th:field="*{getPersonFirstName}"/>
+            Исполнитель
+            <input type="text" aria-label="Last name" class="form-control" placeholder="Фамилия"
+                   th:field="*{getPersonLastName}"/>
             <br/>
             <input class="btn btn-lg btn-primary" type="submit" value="Подготовить дела &raquo;">
         </form>

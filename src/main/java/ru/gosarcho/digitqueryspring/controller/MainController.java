@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.gosarcho.digitqueryspring.model.Person;
 
-
 @Controller
 public class MainController {
 
@@ -32,14 +31,12 @@ public class MainController {
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.POST)
     public String newPerson(Model model, @ModelAttribute("personForm") PersonForm personForm) {
-        String lastName = personForm.getLastName();
-        String firstName = personForm.getFirstName();
-        String middleName = personForm.getMiddleName();
+        String lastName = personForm.getPersonLastName();
+        String firstName = personForm.getPersonFirstName();
+        String executor = personForm.getExecutorLastName();
 
-        if (lastName != null && lastName.length() > 0
-                && firstName != null && firstName.length() > 0
-                && middleName != null && middleName.length() > 0) {
-            person = new Person(lastName, firstName, middleName);
+        if (lastName != null && lastName.length() > 0 && firstName != null && firstName.length() > 0) {
+            person = new Person(lastName+' '+firstName, executor);
             return "redirect:/affairsList";
         }
         model.addAttribute("errorMessage", errorMessage);
@@ -66,14 +63,14 @@ public class MainController {
     @RequestMapping(value = {"/addAffair"}, method = RequestMethod.POST)
     public String saveAffair(Model model, @ModelAttribute("affairForm") AffairForm affairForm) {
 
-        String fund = affairForm.getFund();
-        String register = affairForm.getRegister();
+        String fond = affairForm.getFond();
+        String op = affairForm.getOp();
         String affair = affairForm.getAffair();
 
-        if (fund != null && fund.length() > 0
-                && register != null && register.length() > 0
+        if (fond != null && fond.length() > 0
+                && op != null && op.length() > 0
                 && affair != null && affair.length() > 0) {
-            affairs.add(new Affair(fund, register, affair));
+            affairs.add(new Affair(fond, op, affair));
 
             return "redirect:/affairsList";
         }

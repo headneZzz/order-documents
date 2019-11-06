@@ -5,13 +5,13 @@ import lombok.Data;
 @Data
 public class Affair {
 
-    private String fund;
-    private String register;
+    private String fond;
+    private String op;
     private String affair;
 
-    public Affair(String fund, String register, String affair) {
-        this.fund = fund;
-        this.register = register;
+    public Affair(String fond, String op, String affair) {
+        this.fond = fond;
+        this.op = op;
         this.affair = affair;
     }
 

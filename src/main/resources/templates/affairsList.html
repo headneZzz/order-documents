@@ -2,21 +2,14 @@
 <!-- Thymeleaf Namespace -->
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link href="/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
-    <title>Список дел</title>
-</head>
+<head th:replace="fragments/head :: head"></head>
 
 <body>
 <div class="container">
     <br/>
     <div class="jumbotron">
-        <div th:with="fullName = ${person.lastName}+' '+ ${person.firstName}+' '+${person.middleName}">
-            <h2>Список дел для: </h2>
-            <h3 th:utext="${fullName}"></h3>
-        </div>
+        <h2>Список дел для: </h2>
+        <h3 th:utext="${person.getPersonFullName}"></h3>
         <br/>
         <div style="display: inline;">
             <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
@@ -35,8 +28,8 @@
         </thead>
         <tbody>
         <tr th:each="affair : ${affairs}">
-            <td th:utext="${affair.fund}">...</td>
-            <td th:utext="${affair.register}">...</td>
+            <td th:utext="${affair.getFond}">...</td>
+            <td th:utext="${affair.getOp}">...</td>
             <td th:utext="${affair.affair}">...</td>
         </tr>
         </tbody>

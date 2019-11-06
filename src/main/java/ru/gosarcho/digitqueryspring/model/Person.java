@@ -4,13 +4,11 @@ import lombok.Data;
 
 @Data
 public class Person {
-    private String lastName;
-    private String firstName;
-    private String middleName;
+    private String personFullName;
+    private String executorLastName;
 
-    public Person(String lastName, String firstName, String middleName) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
+    public Person(String person, String executor) {
+        personFullName = person;
+        executorLastName = executor;
     }
 }

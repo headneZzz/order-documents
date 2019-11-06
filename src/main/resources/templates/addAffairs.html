@@ -2,12 +2,7 @@
 <!-- Thymeleaf Namespace -->
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link href="/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
-    <title>Добавить дело</title>
-</head>
+<head th:replace="fragments/head :: head"></head>
 
 <body>
 <div class="container" style="width: 100%; padding: 10%; margin: auto;">
@@ -17,8 +12,8 @@
     <form th:action="@{/addAffair}"
           th:object="${affairForm}"
           method="POST">
-        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{fund}"/>
-        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{register}"/>
+        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{getFond}"/>
+        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{getOp}"/>
         <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{affair}"/>
         <br/>
         <input class="btn btn-primary" type="submit" value="Добавить">
