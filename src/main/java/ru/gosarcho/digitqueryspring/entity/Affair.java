@@ -1,4 +1,4 @@
-package ru.gosarcho.digitqueryspring.domain;
+package ru.gosarcho.digitqueryspring.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +15,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AffairModel {
+public class Affair {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "affair_id")
     private Long id;
 

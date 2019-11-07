@@ -3,11 +3,11 @@ package ru.gosarcho.digitqueryspring.model;
 import lombok.Data;
 
 @Data
-public class Person {
+public class PersonModel {
     private String personFullName;
     private String executorLastName;
 
-    public Person(String person, String executor) {
+    public PersonModel(String person, String executor) {
         personFullName = person;
         executorLastName = executor;
     }

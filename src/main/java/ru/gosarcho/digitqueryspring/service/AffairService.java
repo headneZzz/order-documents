@@ -2,7 +2,7 @@ package ru.gosarcho.digitqueryspring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.gosarcho.digitqueryspring.model.Affair;
+import ru.gosarcho.digitqueryspring.entity.Affair;
 import ru.gosarcho.digitqueryspring.repository.AffairRepository;
 
 import java.util.List;
@@ -18,5 +18,9 @@ public class AffairService {
 
     public List<Affair> getAll() {
         return repository.findAll();
+    }
+
+    public void save(Affair affair) {
+        repository.save(affair);
     }
 }

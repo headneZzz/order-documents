@@ -9,11 +9,13 @@
     <br/>
     <div class="jumbotron">
         <h2>Список дел для: </h2>
-        <h3 th:utext="${person.getPersonFullName}"></h3>
+        <h3 th:utext="${person.personFullName}"></h3>
         <br/>
         <div style="display: inline;">
             <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
-            <a class="btn btn-lg btn-secondary" href="#" role="button">Отправить</a>
+            <form method="post" th:action="@{/affairsList}">
+                <input type="submit" class="btn btn-lg btn-secondary" value="Отправить"/>
+            </form>
         </div>
         <br/>
     </div>
@@ -28,8 +30,8 @@
         </thead>
         <tbody>
         <tr th:each="affair : ${affairs}">
-            <td th:utext="${affair.getFond}">...</td>
-            <td th:utext="${affair.getOp}">...</td>
+            <td th:utext="${affair.fond}">...</td>
+            <td th:utext="${affair.op}">...</td>
             <td th:utext="${affair.affair}">...</td>
         </tr>
         </tbody>
