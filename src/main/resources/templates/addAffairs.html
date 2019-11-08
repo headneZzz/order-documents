@@ -12,9 +12,14 @@
     <form th:action="@{/addAffair}"
           th:object="${affairForm}"
           method="POST">
-        <input type="text" class="form-control" placeholder="Номер фонда" th:field="*{fond}"/>
-        <input type="text" class="form-control" placeholder="Номер описи" th:field="*{op}"/>
-        <input type="text" class="form-control" placeholder="Номер дела" th:field="*{affair}"/>
+        <input type="text" aria-label="Fond" class="form-control" placeholder="Номер фонда"
+               autocomplete="off" th:field="*{fond}"/>
+
+        <input type="text" aria-label="Op" class="form-control" placeholder="Номер описи"
+               autocomplete="off" th:field="*{op}"/>
+
+        <input type="text" aria-label="Affair" class="form-control" placeholder="Номер дела"
+               autocomplete="off" th:field="*{affair}"/>
         <br/>
         <input class="btn btn-primary" type="submit" value="Добавить">
 

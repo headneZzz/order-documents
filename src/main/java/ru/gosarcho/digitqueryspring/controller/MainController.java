@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.gosarcho.digitqueryspring.entity.Affair;
 import ru.gosarcho.digitqueryspring.form.AffairForm;
@@ -37,11 +36,13 @@ public class MainController {
 
     @PostMapping({"/", "/index"})
     public String newPerson(Model model, @ModelAttribute("personForm") PersonForm personForm) {
-        String lastName = personForm.getPersonLastName();
-        String firstName = personForm.getPersonFirstName();
+        String lastName = personForm.getReaderLastName();
+        String firstName = personForm.getReaderFirstName();
         String executor = personForm.getExecutorLastName();
 
-        if (lastName != null && lastName.length() > 0 && firstName != null && firstName.length() > 0) {
+        if (lastName != null && lastName.length() > 0
+                && firstName != null && firstName.length() > 0
+                && executor != null && executor.length() > 0) {
             person = new PersonModel(lastName + ' ' + firstName, executor);
             return "redirect:/affairsList";
         }
@@ -53,7 +54,9 @@ public class MainController {
     public String affairList(Model model) {
         model.addAttribute("person", person);
         model.addAttribute("affairs", affairModelList);
-
+        if (affairModelList.size() != 0) {
+            model.addAttribute("isSending", true);
+        }
         return "affairsList";
     }
 
@@ -64,7 +67,7 @@ public class MainController {
             affair.setFond(affairObj.getFond());
             affair.setOp(affairObj.getOp());
             affair.setAffair(affairObj.getAffair());
-            affair.setPerson(person.getPersonFullName());
+            affair.setPerson(person.getReaderFullName());
             affair.setExecutor(person.getExecutorLastName());
             affair.setReceiptDate(LocalDate.now());
             affairService.save(affair);

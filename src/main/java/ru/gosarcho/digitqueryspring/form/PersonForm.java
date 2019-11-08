@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PersonForm {
-    private String personLastName;
-    private String personFirstName;
+    private String readerLastName;
+    private String readerFirstName;
     private String executorLastName;
 }

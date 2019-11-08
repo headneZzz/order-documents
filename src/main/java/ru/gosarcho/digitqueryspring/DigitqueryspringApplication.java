@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // - для конкретного посетителя
 // - по датам
 //TODO Реализовать функцию отправки нужных дел
-//TODO Сделать возможным одновременно использовать приложение с разными данными нескольким пользователям
-//TODO Сделать страницу-шаблон для Thymeleaf
 @SpringBootApplication
 public class DigitqueryspringApplication {
 

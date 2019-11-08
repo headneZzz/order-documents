@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class PersonModel {
-    private String personFullName;
+    private String readerFullName;
     private String executorLastName;
 
-    public PersonModel(String person, String executor) {
-        personFullName = person;
+    public PersonModel(String reader, String executor) {
+        readerFullName = reader;
         executorLastName = executor;
     }
 }

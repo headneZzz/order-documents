@@ -9,14 +9,11 @@
     <br/>
     <div class="jumbotron">
         <h2>Список дел для: </h2>
-        <h3 th:utext="${person.personFullName}"></h3>
+        <h3 th:utext="${person.readerFullName}"></h3>
         <br/>
-        <div style="display: inline;">
-            <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
-            <form method="post" th:action="@{/affairsList}">
-                <input type="submit" class="btn btn-lg btn-secondary" value="Отправить"/>
-            </form>
-        </div>
+
+        <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
+
         <br/>
     </div>
 
@@ -36,6 +33,11 @@
         </tr>
         </tbody>
     </table>
+    <div th:if="${isSending}">
+    <form method="post" th:action="@{/affairsList}">
+        <input type="submit" class="btn btn-primary btn-lg btn-block" value="Отправить"/>
+    </form>
+    </div>
 </div>
 </body>
 </html>
