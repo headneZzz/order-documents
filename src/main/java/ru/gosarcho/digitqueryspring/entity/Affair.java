@@ -17,8 +17,9 @@ import java.time.LocalDate;
 @Builder
 public class Affair {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "affair_id")
+    @Basic(optional = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "affair_id", unique = true, nullable = false, precision = 20, scale = 0)
     private Long id;
 
     @Column(name = "fond")

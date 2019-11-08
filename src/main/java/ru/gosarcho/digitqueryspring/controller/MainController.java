@@ -1,5 +1,6 @@
 package ru.gosarcho.digitqueryspring.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,10 +66,11 @@ public class MainController {
             affair.setAffair(affairObj.getAffair());
             affair.setPerson(person.getPersonFullName());
             affair.setExecutor(person.getExecutorLastName());
+            affair.setReceiptDate(LocalDate.now());
             affairService.save(affair);
         }
         affairModelList.clear();
-        return "index";
+        return "load";
     }
 
     @GetMapping("/addAffair")

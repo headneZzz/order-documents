@@ -13,12 +13,13 @@
         <form th:action="@{/}"
               th:object="${personForm}"
               method="POST">
-            Читатель:
+            <h6>Читатель:</h6>
             <input type="text" aria-label="Last name" class="form-control" placeholder="Фамилия"
                    th:field="*{personLastName}"/>
             <input type="text" aria-label="First name" class="form-control" placeholder="Имя"
                    th:field="*{personFirstName}"/>
-            Исполнитель
+            <br/>
+            <h6>Исполнитель</h6>
             <input type="text" aria-label="Last name" class="form-control" placeholder="Фамилия"
                    th:field="*{executorLastName}"/>
             <br/>
