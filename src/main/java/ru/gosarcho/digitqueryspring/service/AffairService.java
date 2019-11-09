@@ -11,15 +11,12 @@ import java.util.List;
 public class AffairService {
     @Autowired
     private final AffairRepository repository;
-
     public AffairService(AffairRepository repository) {
         this.repository = repository;
     }
-
     public List<Affair> getAll() {
         return repository.findAll();
     }
-
     public void save(Affair affair) {
         repository.save(affair);
     }

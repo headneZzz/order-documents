@@ -10,9 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //TODO Реализовать функцию отправки нужных дел
 @SpringBootApplication
 public class DigitqueryspringApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(DigitqueryspringApplication.class, args);
     }
-
 }
