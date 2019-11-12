@@ -13,7 +13,7 @@ public class AffairDto {
     private String fond;
     private String op;
     private String affair;
-    private String person;
+    private String reader;
     private String executor;
     private LocalDate receiptDate;
 }

@@ -31,8 +31,8 @@ public class Affair {
     @Column(name = "affair")
     private String affair;
 
-    @Column(name = "person")
-    private String person;
+    @Column(name = "reader")
+    private String reader;
 
     @Column(name = "executor")
     private String executor;

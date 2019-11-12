@@ -10,6 +10,13 @@
     <div class="jumbotron">
         <h2>Оцифровка</h2>
         <br/>
+        <!-- Не дает отправлять POST запрос при обновлении страницы -->
+        <script>
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        </script>
+
         <form th:action="@{/}"
               th:object="${personForm}"
               method="POST">
@@ -35,7 +42,7 @@
     </div>
 </div>
 <div style="text-align: center;">
-    <a href="#" class="btn btn-lg btn-info disabled" role="button" aria-disabled="true">Сделать выгрузку</a>
+    <a href="unload" class="btn btn-lg btn-info" role="button">Сделать выгрузку</a>
 </div>
 </body>
 </html>

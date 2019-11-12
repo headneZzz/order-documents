@@ -1,18 +1,12 @@
 package ru.gosarcho.digitqueryspring.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class AffairModel {
-
     private String fond;
     private String op;
     private String affair;
-
-    public AffairModel(String fond, String op, String affair) {
-        this.fond = fond;
-        this.op = op;
-        this.affair = affair;
-    }
-
 }

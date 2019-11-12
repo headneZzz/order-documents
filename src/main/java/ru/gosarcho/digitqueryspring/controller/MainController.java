@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import ru.gosarcho.digitqueryspring.model.PersonModel;
 import ru.gosarcho.digitqueryspring.service.AffairService;
+import ru.gosarcho.digitqueryspring.util.AffairFilter;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -31,8 +29,10 @@ public class MainController {
     private static PersonModel person;
     private final String AFFAIRS_FOLDER_DIRECTORY = "D:\\test\\";
     private final String READING_ROOM_DIRECTORY = "D:\\test\\";
-    @Value("${error.message}")
-    private String errorMessage;
+    @Value("Все поля должны быть заполнены")
+    private String fieldErrorMessage;
+    @Value("Данного дела нет в базе")
+    private String toFindAffairErrorMessage;
 
     @Autowired
     private AffairService affairService;
@@ -56,8 +56,9 @@ public class MainController {
             person = new PersonModel(lastName + ' ' + firstName, executor);
             return "redirect:/affairsList";
         }
-        model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("errorMessage", fieldErrorMessage);
         return "index";
+
     }
 
     @GetMapping("/affairsList")
@@ -78,7 +79,8 @@ public class MainController {
                 File out = new File(READING_ROOM_DIRECTORY + person.getReaderFullName()
                         + File.separator + cutName[0] + "_" + cutName[1] + "_" + cutName[2]);
                 out.mkdirs();
-                Files.copy(affair.toPath(), new File(out.toString() + File.separator + affair.getName()).toPath(),
+                Files.copy(affair.toPath(),
+                        new File(out.toString() + File.separator + affair.getName()).toPath(),
                         REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -90,7 +92,7 @@ public class MainController {
             affair.setFond(affairModel.getFond());
             affair.setOp(affairModel.getOp());
             affair.setAffair(affairModel.getAffair());
-            affair.setPerson(person.getReaderFullName());
+            affair.setReader(person.getReaderFullName());
             affair.setExecutor(person.getExecutorLastName());
             affair.setReceiptDate(LocalDate.now());
             affairService.save(affair);
@@ -123,11 +125,37 @@ public class MainController {
                 affairFiles.addAll(Arrays.asList(Objects.requireNonNull(affairDir.listFiles())));
                 return "redirect:/affairsList";
             }
-            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("errorMessage", toFindAffairErrorMessage);
             return "addAffairs";
         }
 
-        model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("errorMessage", fieldErrorMessage);
         return "addAffairs";
+    }
+
+    @GetMapping("/unload")
+    public String unloadFromDb(Model model) {
+        List<Affair> affairsFromDb = affairService.getAll();
+        model.addAttribute("affairFilter", new AffairFilter());
+        model.addAttribute("affairs", affairsFromDb);
+        model.addAttribute("affairsCount", "Всего дел: " + affairsFromDb.size());
+        model.addAttribute("uniqueAffairsCount", "Уникальных дел: " + affairsFromDb.stream().map(affair -> affair.getFond()+affair.getOp()+affair.getAffair()).distinct().count());
+        return "unloadFromDb";
+    }
+
+    @PostMapping("/unload")
+    public String unloadFromDbWithFilter(Model model, @ModelAttribute("affairFilter") AffairFilter affairFilter) {
+        if (affairFilter.getDateFrom().length() == 0)
+            affairFilter.setDateFrom("1960-01-01");
+        if (affairFilter.getDateTo().length() == 0)
+            affairFilter.setDateTo(LocalDate.now().toString());
+
+        LocalDate dateFrom = LocalDate.parse(affairFilter.getDateFrom());
+        LocalDate dateTo = LocalDate.parse(affairFilter.getDateTo());
+        List<Affair> affairsFromDb = affairService.getAllByFilter(dateFrom, dateTo, affairFilter.getReader(), affairFilter.getExecutor());
+        model.addAttribute("affairs", affairsFromDb);
+        model.addAttribute("affairsCount", "Всего дел: " + affairsFromDb.size());
+        model.addAttribute("uniqueAffairsCount", "Уникальных дел: " + affairsFromDb.stream().distinct().count());
+        return "unloadFromDb";
     }
 }
