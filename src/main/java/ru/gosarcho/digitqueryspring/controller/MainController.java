@@ -137,10 +137,7 @@ public class MainController {
     public String unloadFromDb(Model model) {
         List<Affair> affairsFromDb = affairService.getAll();
         model.addAttribute("affairFilter", new AffairFilter());
-        model.addAttribute("affairs", affairsFromDb);
-        model.addAttribute("affairsCount", "Всего дел: " + affairsFromDb.size());
-        model.addAttribute("uniqueAffairsCount", "Уникальных дел: " + affairsFromDb.stream().map(affair -> affair.getFond()+affair.getOp()+affair.getAffair()).distinct().count());
-        return "unloadFromDb";
+        return unloadSetAttributes(model, affairsFromDb);
     }
 
     @PostMapping("/unload")
@@ -153,9 +150,14 @@ public class MainController {
         LocalDate dateFrom = LocalDate.parse(affairFilter.getDateFrom());
         LocalDate dateTo = LocalDate.parse(affairFilter.getDateTo());
         List<Affair> affairsFromDb = affairService.getAllByFilter(dateFrom, dateTo, affairFilter.getReader(), affairFilter.getExecutor());
+        return unloadSetAttributes(model, affairsFromDb);
+    }
+
+    private String unloadSetAttributes(Model model, List<Affair> affairsFromDb) {
         model.addAttribute("affairs", affairsFromDb);
         model.addAttribute("affairsCount", "Всего дел: " + affairsFromDb.size());
-        model.addAttribute("uniqueAffairsCount", "Уникальных дел: " + affairsFromDb.stream().distinct().count());
+        String[] affairsNames = affairsFromDb.stream().map(a -> a.getFond() + '_' + a.getOp() + '_' + a.getAffair()).distinct().toArray(String[]::new);
+        model.addAttribute("uniqueAffairsCount", "Уникальных дел: " + affairsNames.length);
         return "unloadFromDb";
     }
 }
