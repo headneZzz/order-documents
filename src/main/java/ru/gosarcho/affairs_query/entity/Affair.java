@@ -1,4 +1,4 @@
-package ru.gosarcho.digitqueryspring.entity;
+package ru.gosarcho.affairs_query.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

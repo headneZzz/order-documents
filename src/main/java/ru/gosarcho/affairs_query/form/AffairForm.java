@@ -1,4 +1,4 @@
-package ru.gosarcho.digitqueryspring.form;
+package ru.gosarcho.affairs_query.form;
 
 import lombok.Data;
 

@@ -1,12 +1,12 @@
-package ru.gosarcho.digitqueryspring.controller;
+package ru.gosarcho.affairs_query.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.gosarcho.digitqueryspring.form.PersonForm;
-import ru.gosarcho.digitqueryspring.model.PersonModel;
+import ru.gosarcho.affairs_query.form.PersonForm;
+import ru.gosarcho.affairs_query.model.PersonModel;
 
-import static ru.gosarcho.digitqueryspring.controller.MainController.*;
+import static ru.gosarcho.affairs_query.controller.MainController.*;
 
 @Controller
 @RequestMapping({"/", "index"})

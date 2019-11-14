@@ -1,9 +1,9 @@
-package ru.gosarcho.digitqueryspring.service;
+package ru.gosarcho.affairs_query.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.gosarcho.digitqueryspring.entity.Affair;
-import ru.gosarcho.digitqueryspring.repository.AffairRepository;
+import ru.gosarcho.affairs_query.entity.Affair;
+import ru.gosarcho.affairs_query.repository.AffairRepository;
 
 import java.time.LocalDate;
 import java.util.List;

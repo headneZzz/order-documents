@@ -1,9 +1,9 @@
-package ru.gosarcho.digitqueryspring.controller;
+package ru.gosarcho.affairs_query.controller;
 
 import org.springframework.stereotype.Controller;
-import ru.gosarcho.digitqueryspring.model.AffairModel;
-import ru.gosarcho.digitqueryspring.model.PersonModel;
-import ru.gosarcho.digitqueryspring.service.AffairService;
+import ru.gosarcho.affairs_query.model.AffairModel;
+import ru.gosarcho.affairs_query.model.PersonModel;
+import ru.gosarcho.affairs_query.service.AffairService;
 
 import java.io.File;
 import java.util.ArrayList;

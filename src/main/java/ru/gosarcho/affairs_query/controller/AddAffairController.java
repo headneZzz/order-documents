@@ -1,16 +1,16 @@
-package ru.gosarcho.digitqueryspring.controller;
+package ru.gosarcho.affairs_query.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.gosarcho.digitqueryspring.form.AffairForm;
-import ru.gosarcho.digitqueryspring.model.AffairModel;
+import ru.gosarcho.affairs_query.form.AffairForm;
+import ru.gosarcho.affairs_query.model.AffairModel;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static ru.gosarcho.digitqueryspring.controller.MainController.*;
+import static ru.gosarcho.affairs_query.controller.MainController.*;
 
 @Controller
 @RequestMapping("/addAffair")

@@ -1,11 +1,11 @@
-package ru.gosarcho.digitqueryspring.controller;
+package ru.gosarcho.affairs_query.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.gosarcho.digitqueryspring.entity.Affair;
-import ru.gosarcho.digitqueryspring.model.AffairModel;
+import ru.gosarcho.affairs_query.entity.Affair;
+import ru.gosarcho.affairs_query.model.AffairModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static ru.gosarcho.digitqueryspring.controller.MainController.*;
+import static ru.gosarcho.affairs_query.controller.MainController.*;
 
 @Controller
 @RequestMapping("/affairsList")

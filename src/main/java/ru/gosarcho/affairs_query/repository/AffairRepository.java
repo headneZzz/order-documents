@@ -1,8 +1,8 @@
-package ru.gosarcho.digitqueryspring.repository;
+package ru.gosarcho.affairs_query.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.gosarcho.digitqueryspring.entity.Affair;
+import ru.gosarcho.affairs_query.entity.Affair;
 
 import java.time.LocalDate;
 import java.util.List;

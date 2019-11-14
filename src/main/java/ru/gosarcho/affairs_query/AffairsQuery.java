@@ -1,11 +1,11 @@
-package ru.gosarcho.digitqueryspring;
+package ru.gosarcho.affairs_query;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DigitqueryspringApplication {
+public class AffairsQuery {
     public static void main(String[] args) {
-        SpringApplication.run(DigitqueryspringApplication.class, args);
+        SpringApplication.run(AffairsQuery.class, args);
     }
 }

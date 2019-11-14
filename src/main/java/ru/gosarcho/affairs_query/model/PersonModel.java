@@ -1,4 +1,4 @@
-package ru.gosarcho.digitqueryspring.model;
+package ru.gosarcho.affairs_query.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

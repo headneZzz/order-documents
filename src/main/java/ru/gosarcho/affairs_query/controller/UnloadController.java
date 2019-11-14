@@ -1,15 +1,15 @@
-package ru.gosarcho.digitqueryspring.controller;
+package ru.gosarcho.affairs_query.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.gosarcho.digitqueryspring.entity.Affair;
-import ru.gosarcho.digitqueryspring.util.AffairFilter;
+import ru.gosarcho.affairs_query.entity.Affair;
+import ru.gosarcho.affairs_query.util.AffairFilter;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.gosarcho.digitqueryspring.controller.MainController.affairService;
+import static ru.gosarcho.affairs_query.controller.MainController.affairService;
 
 
 @Controller
