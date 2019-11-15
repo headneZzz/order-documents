@@ -62,8 +62,8 @@ public class AddAffairController {
         return "addAffairs";
     }
     private String addAndReturn(AffairModel affairModel, List<File> affairList) {
-        affairModels.add(affairModel);
-        affairFiles.addAll(affairList);
+        person.getAffairModels().add(affairModel);
+        person.getAffairFiles().addAll(affairList);
         return "redirect:/affairsList";
     }
 }

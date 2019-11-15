@@ -22,8 +22,8 @@ public class AffairsListController {
     @RequestMapping(method = RequestMethod.GET)
     public String affairList(Model model) {
         model.addAttribute("person", person);
-        model.addAttribute("affairs", affairModels);
-        if (affairModels.size() != 0) {
+        model.addAttribute("affairs", person.getAffairModels());
+        if (person.getAffairModels().size() != 0) {
             model.addAttribute("isSending", true);
         }
         return "affairsList";
@@ -32,7 +32,7 @@ public class AffairsListController {
     @RequestMapping(method = RequestMethod.POST)
     public String saveAndLoadAffairList() {
         //Отправка файлов
-        for (File affair : affairFiles) {
+        for (File affair : person.getAffairFiles()) {
             try {
                 String[] cutName = affair.getName().split("_");
                 File out = new File(READING_ROOM_DIRECTORY + person.getReaderFullName()
@@ -46,7 +46,7 @@ public class AffairsListController {
             }
         }
         //Сохранение в бд
-        for (AffairModel affairModel : affairModels) {
+        for (AffairModel affairModel : person.getAffairModels()) {
             Affair affair = new Affair();
             affair.setFond(affairModel.getFond());
             affair.setOp(affairModel.getOp());
@@ -56,8 +56,8 @@ public class AffairsListController {
             affair.setReceiptDate(LocalDate.now());
             affairService.save(affair);
         }
-        affairModels.clear();
-        affairFiles.clear();
+        person.getAffairModels().clear();
+        person.getAffairFiles().clear();
         return "load";
     }
 }
