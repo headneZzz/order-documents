@@ -14,8 +14,11 @@ class MainController {
     static List<AffairModel> affairModels = new ArrayList<>();
     static List<File> affairFiles = new ArrayList<>();
     static PersonModel person;
-    static final String AFFAIRS_FOLDER_DIRECTORY = "D:\\test\\";
-    static final String READING_ROOM_DIRECTORY = "D:\\test\\";
+    static final String AFFAIRS_FOLDER_DIRECTORY = "I:\\Оцифровка\\Фонды\\";
+    static final File AFFAIRS_FROM_DIGITIZER_1 = new File("I:\\Оцифровка\\КолесниковаЕ\\");
+    static final File AFFAIRS_FROM_DIGITIZER_2 = new File("I:\\Оцифровка\\Степаненко\\");
+    static final File AFFAIRS_FROM_DIGITIZER_3 = new File("I:\\Оцифровка\\Гимодудинов\\");
+    static final String READING_ROOM_DIRECTORY = "I:\\Читальный зал\\";
 
     static AffairService affairService;
 

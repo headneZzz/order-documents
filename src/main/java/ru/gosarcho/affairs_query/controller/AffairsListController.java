@@ -45,7 +45,6 @@ public class AffairsListController {
                 e.printStackTrace();
             }
         }
-
         //Сохранение в бд
         for (AffairModel affairModel : affairModels) {
             Affair affair = new Affair();
@@ -58,6 +57,7 @@ public class AffairsListController {
             affairService.save(affair);
         }
         affairModels.clear();
+        affairFiles.clear();
         return "load";
     }
 }

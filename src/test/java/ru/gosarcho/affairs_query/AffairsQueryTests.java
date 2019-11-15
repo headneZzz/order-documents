@@ -1,4 +1,4 @@
-package ru.gosarcho.digitqueryspring;
+package ru.gosarcho.affairs_query;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
