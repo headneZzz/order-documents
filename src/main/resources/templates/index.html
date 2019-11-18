@@ -31,7 +31,8 @@
             <input type="text" aria-label="Last name" class="form-control" placeholder="Фамилия"
                    autocomplete="on" th:field="*{executorLastName}"/>
             <br/>
-            <input class="btn btn-lg btn-primary" type="submit" value="Подготовить дела &raquo;">
+            <input class="btn btn-lg btn-primary" type="submit" value="Подготовить дела &raquo;"
+                   onclick="this.disabled='disabled';this.form.submit();"/>
         </form>
         <br/>
         <div th:if="${errorMessage}"

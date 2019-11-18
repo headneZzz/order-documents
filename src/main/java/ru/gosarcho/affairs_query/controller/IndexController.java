@@ -3,6 +3,7 @@ package ru.gosarcho.affairs_query.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpSession;
 import ru.gosarcho.affairs_query.form.PersonForm;
 import ru.gosarcho.affairs_query.model.PersonModel;
 
@@ -11,7 +12,6 @@ import static ru.gosarcho.affairs_query.controller.MainController.*;
 @Controller
 @RequestMapping({"/", "index"})
 public class IndexController {
-
     @RequestMapping(method = RequestMethod.GET)
     public String index(Model model) {
         PersonForm personForm = new PersonForm();
@@ -20,15 +20,14 @@ public class IndexController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String newPerson(Model model, @ModelAttribute("personForm") PersonForm personForm) {
+    public String newPerson(Model model, @ModelAttribute("personForm") PersonForm personForm, HttpSession session) {
         String lastName = personForm.getReaderLastName();
         String firstName = personForm.getReaderFirstName();
         String executor = personForm.getExecutorLastName();
-
         if (lastName != null && lastName.length() > 0
                 && firstName != null && firstName.length() > 0
                 && executor != null && executor.length() > 0) {
-            person = new PersonModel(lastName + ' ' + firstName, executor);
+            persons.put(session.getId(), new PersonModel(lastName + ' ' + firstName, executor));
             return "redirect:/affairsList";
         }
         model.addAttribute("errorMessage", "Все поля должны быть заполнены");

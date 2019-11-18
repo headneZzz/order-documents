@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ru.gosarcho.affairs_query.entity.Affair;
 import ru.gosarcho.affairs_query.model.AffairModel;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,24 +19,23 @@ import static ru.gosarcho.affairs_query.controller.MainController.*;
 @Controller
 @RequestMapping("/affairsList")
 public class AffairsListController {
-
     @RequestMapping(method = RequestMethod.GET)
-    public String affairList(Model model) {
-        model.addAttribute("person", person);
-        model.addAttribute("affairs", person.getAffairModels());
-        if (person.getAffairModels().size() != 0) {
+    public String affairList(Model model, HttpSession session) {
+        model.addAttribute("person", persons.get(session.getId()).getReaderFullName());
+        model.addAttribute("affairs", persons.get(session.getId()).getAffairModels());
+        if (persons.get(session.getId()).getAffairModels().size() != 0) {
             model.addAttribute("isSending", true);
         }
         return "affairsList";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String saveAndLoadAffairList() {
+    public String saveAndLoadAffairList(HttpSession session) {
         //Отправка файлов
-        for (File affair : person.getAffairFiles()) {
+        for (File affair : persons.get(session.getId()).getAffairFiles()) {
             try {
                 String[] cutName = affair.getName().split("_");
-                File out = new File(READING_ROOM_DIRECTORY + person.getReaderFullName()
+                File out = new File(READING_ROOM_DIRECTORY + persons.get(session.getId()).getReaderFullName()
                         + File.separator + cutName[0] + "_" + cutName[1] + "_" + cutName[2]);
                 out.mkdirs();
                 Files.copy(affair.toPath(),
@@ -46,18 +46,19 @@ public class AffairsListController {
             }
         }
         //Сохранение в бд
-        for (AffairModel affairModel : person.getAffairModels()) {
+        for (AffairModel affairModel : persons.get(session.getId()).getAffairModels()) {
             Affair affair = new Affair();
             affair.setFond(affairModel.getFond());
             affair.setOp(affairModel.getOp());
             affair.setAffair(affairModel.getAffair());
-            affair.setReader(person.getReaderFullName());
-            affair.setExecutor(person.getExecutorLastName());
+            affair.setReader(persons.get(session.getId()).getReaderFullName());
+            affair.setExecutor(persons.get(session.getId()).getExecutorLastName());
             affair.setReceiptDate(LocalDate.now());
             affairService.save(affair);
         }
-        person.getAffairModels().clear();
-        person.getAffairFiles().clear();
+        persons.get(session.getId()).getAffairModels().clear();
+        persons.get(session.getId()).getAffairFiles().clear();
+        persons.remove(session.getId());
         return "load";
     }
 }

@@ -21,7 +21,9 @@
         <input type="text" aria-label="Affair" class="form-control" placeholder="Номер дела"
                autocomplete="off" th:field="*{affair}"/>
         <br/>
-        <input type="submit" class="btn btn-primary" value="Добавить">
+        <input type="submit" class="btn btn-primary" id="addB" value="Добавить"
+               onclick="this.disabled='disabled';this.form.submit();">
+
         <a href="affairsList" class="btn btn-secondary" role="button">Назад</a>
 
     </form>

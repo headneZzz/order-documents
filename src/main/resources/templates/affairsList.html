@@ -9,7 +9,7 @@
     <br/>
     <div class="jumbotron">
         <h2>Список дел для: </h2>
-        <h3 th:utext="${person.readerFullName}"></h3>
+        <h3 th:utext="${person}"></h3>
         <br/>
 
         <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
@@ -34,9 +34,10 @@
         </tbody>
     </table>
     <div th:if="${isSending}">
-    <form method="post" th:action="@{/affairsList}">
-        <input type="submit" class="btn btn-primary btn-lg btn-block" value="Отправить"/>
-    </form>
+        <form method="post" th:action="@{/affairsList}">
+            <input type="submit" class="btn btn-primary btn-lg btn-block" id="sendButton" value="Отправить"
+                   onclick="this.disabled='disabled';this.form.submit();"/>
+        </form>
     </div>
 </div>
 </body>

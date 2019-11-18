@@ -19,6 +19,4 @@ public class PersonModel {
         affairModels = new ArrayList<>();
         affairFiles = new ArrayList<>();
     }
-
-
 }
