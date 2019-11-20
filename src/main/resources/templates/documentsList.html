@@ -34,7 +34,7 @@
         </tbody>
     </table>
     <div th:if="${isSending}">
-        <form method="post" th:action="@{/affairsList}">
+        <form method="post" th:action="@{/documentsList}">
             <input type="submit" class="btn btn-primary btn-lg btn-block" id="sendButton" value="Отправить"
                    onclick="this.disabled='disabled';this.form.submit();"/>
         </form>

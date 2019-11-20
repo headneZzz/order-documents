@@ -62,7 +62,7 @@ public class AddDocumentController {
     private String addAndReturn(DocumentModel documentModel, List<File> documentsList, String sessionId) {
         persons.get(sessionId).getDocumentModels().add(documentModel);
         persons.get(sessionId).getDocumentFiles().addAll(documentsList);
-        return "redirect:/affairsList";
+        return "redirect:/documentsList";
     }
 }
 

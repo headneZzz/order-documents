@@ -20,7 +20,7 @@ import static ru.gosarcho.order_documents.controller.MainController.*;
 @RequestMapping("/documentsList")
 public class DocumentsListController {
     @RequestMapping(method = RequestMethod.GET)
-    public String affairList(Model model, HttpSession session) {
+    public String documentsList(Model model, HttpSession session) {
         model.addAttribute("person", persons.get(session.getId()).getReaderFullName());
         model.addAttribute("documents", persons.get(session.getId()).getDocumentModels());
         if (persons.get(session.getId()).getDocumentModels().size() != 0) {
@@ -30,7 +30,7 @@ public class DocumentsListController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String saveAndLoadAffairList(HttpSession session) {
+    public String saveAndLoadDocumentsList(HttpSession session) {
         //Отправка файлов
         for (File doc : persons.get(session.getId()).getDocumentFiles()) {
             try {

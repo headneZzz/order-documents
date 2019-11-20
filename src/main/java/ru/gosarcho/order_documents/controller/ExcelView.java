@@ -1,10 +1,10 @@
 /*
-package ru.gosarcho.affairs_query.controller;
+package ru.gosarcho.order_documents.controller;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.web.servlet.view.document.AbstractXlsView;
-import Document;
+import ru.gosarcho.order_documents.entity.Document;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,14 +15,13 @@ public class ExcelView extends AbstractXlsView {
     @Override
     protected void buildExcelDocument(Map<String, Object> map, Workbook workbook, HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
-        // change the file name
         httpServletResponse.setHeader("Content-Disposition", "attachment; filename=\"export.xls\"");
 
         @SuppressWarnings("unchecked")
         List<Document> documents = (List<GatewayManage>) map.get("documents");
 
         // create excel xls sheet
-        Sheet sheet = workbook.createSheet("Affairs Details");
+        Sheet sheet = workbook.createSheet("Documents Details");
         sheet.setDefaultColumnWidth(30);
 
         // create style for header cells
@@ -47,7 +46,7 @@ public class ExcelView extends AbstractXlsView {
         }
 
         int rowCount = 1;
-        for (Document affair : documents) {
+        for (Document document : documents) {
             Row userRow = sheet.createRow(rowCount++);
             gatewayRow.createCell(0).setCellValue(user.getFirstName());
             gatewayRow.createCell(1).setCellValue(gateway.getLastName());
