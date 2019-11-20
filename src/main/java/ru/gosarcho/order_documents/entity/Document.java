@@ -1,4 +1,4 @@
-package ru.gosarcho.affairs_query.entity;
+package ru.gosarcho.order_documents.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,16 +10,16 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "affairs")
+@Table(name = "documents")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Affair {
+public class Document {
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name = "affair_id", unique = true, nullable = false, precision = 20, scale = 0)
+    @Column(name = "document_id", unique = true, nullable = false, precision = 20, scale = 0)
     private Long id;
 
     @Column(name = "fond")
@@ -28,8 +28,8 @@ public class Affair {
     @Column(name = "op")
     private String op;
 
-    @Column(name = "affair")
-    private String affair;
+    @Column(name = "document")
+    private String document;
 
     @Column(name = "reader")
     private String reader;

@@ -12,7 +12,7 @@
         <h3 th:utext="${person}"></h3>
         <br/>
 
-        <a class="btn btn-lg btn-primary" href="addAffair" role="button">Добавить дело</a>
+        <a class="btn btn-lg btn-primary" href="addDocument" role="button">Добавить дело</a>
 
         <br/>
     </div>
@@ -26,10 +26,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="affair : ${affairs}">
-            <td th:utext="${affair.fond}">...</td>
-            <td th:utext="${affair.op}">...</td>
-            <td th:utext="${affair.affair}">...</td>
+        <tr th:each="doc : ${documents}">
+            <td th:utext="${doc.fond}">...</td>
+            <td th:utext="${doc.op}">...</td>
+            <td th:utext="${doc.document}">...</td>
         </tr>
         </tbody>
     </table>

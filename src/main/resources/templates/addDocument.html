@@ -9,22 +9,16 @@
     <br/>
     <h3>Добавить дело:</h3>
 
-    <form th:action="@{/addAffair}"
-          th:object="${affairForm}"
+    <form th:action="@{/addDocument}"
+          th:object="${documentForm}"
           method="POST">
-        <input type="text" aria-label="Fond" class="form-control" placeholder="Номер фонда"
-               autocomplete="off" th:field="*{fond}"/>
-
-        <input type="text" aria-label="Op" class="form-control" placeholder="Номер описи"
-               autocomplete="off" th:field="*{op}"/>
-
-        <input type="text" aria-label="Affair" class="form-control" placeholder="Номер дела"
-               autocomplete="off" th:field="*{affair}"/>
+        <input type="text" aria-label="Document" class="form-control" placeholder="Фонд Опись Дело"
+               autocomplete="off" th:field="*{document}"/>
         <br/>
         <input type="submit" class="btn btn-primary" id="addB" value="Добавить"
                onclick="this.disabled='disabled';this.form.submit();">
 
-        <a href="affairsList" class="btn btn-secondary" role="button">Назад</a>
+        <a href="documentsList" class="btn btn-secondary" role="button">Назад</a>
 
     </form>
     <br/>

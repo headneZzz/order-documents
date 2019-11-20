@@ -9,8 +9,8 @@
     <br/>
     <div class="jumbotron">
         <h2>Выгрузка</h2>
-        <h4 th:utext="${affairsCount}"></h4>
-        <h4 th:utext="${uniqueAffairsCount}"></h4>
+        <h4 th:utext="${documentsCount}"></h4>
+        <h4 th:utext="${uniqueDocumentsCount}"></h4>
         <br/>
         <!-- Не дает отправлять POST запрос при обновлении страницы -->
         <script>
@@ -19,7 +19,7 @@
             }
         </script>
         <form th:action="@{/unload}"
-              th:object="${affairFilter}"
+              th:object="${documentsFilter}"
               method="POST">
             <div class="row">
                 <div class="col-2">
@@ -48,7 +48,9 @@
                 </div>
             </div>
             <input type="submit" class="btn btn-primary" value="Отсортировать">
+            <a class="btn btn-secondary" href="index" role="button">Назад</a>
         </form>
+
     </div>
 
     <table class="table">
@@ -63,13 +65,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="affair : ${affairs}">
-            <td th:utext="${affair.getFond()}">...</td>
-            <td th:utext="${affair.getOp()}">...</td>
-            <td th:utext="${affair.getAffair()}">...</td>
-            <td th:utext="${affair.getReader()}">...</td>
-            <td th:utext="${affair.getExecutor()}">...</td>
-            <td th:utext="${#temporals.format(affair.getReceiptDate(),'dd.MM.yyyy')}">...</td>
+        <tr th:each="document : ${documents}">
+            <td th:utext="${document.getFond()}">...</td>
+            <td th:utext="${document.getOp()}">...</td>
+            <td th:utext="${document.getDocument()}">...</td>
+            <td th:utext="${document.getReader()}">...</td>
+            <td th:utext="${document.getExecutor()}">...</td>
+            <td th:utext="${#temporals.format(document.getReceiptDate(),'dd.MM.yyyy')}">...</td>
         </tr>
         </tbody>
     </table>

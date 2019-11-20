@@ -1,11 +1,11 @@
-package ru.gosarcho.affairs_query.util;
+package ru.gosarcho.order_documents.util;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AffairFilter {
+public class DocumentsFilter {
     private String dateFrom;
     private String dateTo;
     private String reader;

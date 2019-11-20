@@ -1,11 +1,11 @@
-package ru.gosarcho.affairs_query;
+package ru.gosarcho.order_documents;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AffairsQuery {
+public class OrderDocuments {
     public static void main(String[] args) {
-        SpringApplication.run(AffairsQuery.class, args);
+        SpringApplication.run(OrderDocuments.class, args);
     }
 }

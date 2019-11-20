@@ -1,4 +1,4 @@
-package ru.gosarcho.affairs_query.model;
+package ru.gosarcho.order_documents.model;
 
 import lombok.Data;
 
@@ -10,13 +10,13 @@ import java.util.List;
 public class PersonModel {
     private String readerFullName;
     private String executorLastName;
-    private List<AffairModel> affairModels;
-    private List<File> affairFiles;
+    private List<DocumentModel> documentModels;
+    private List<File> documentFiles;
 
     public PersonModel(String readerFullName, String executorLastName){
         this.readerFullName = readerFullName;
         this.executorLastName = executorLastName;
-        affairModels = new ArrayList<>();
-        affairFiles = new ArrayList<>();
+        documentModels = new ArrayList<>();
+        documentFiles = new ArrayList<>();
     }
 }

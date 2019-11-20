@@ -1,10 +1,9 @@
-package ru.gosarcho.affairs_query.form;
+package ru.gosarcho.order_documents.form;
 
 import lombok.Data;
 
 @Data
 public class PersonForm {
     private String readerLastName;
-    private String readerFirstName;
     private String executorLastName;
 }

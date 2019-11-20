@@ -1,12 +1,12 @@
-package ru.gosarcho.affairs_query.model;
+package ru.gosarcho.order_documents.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AffairModel {
+public class DocumentModel {
     private String fond;
     private String op;
-    private String affair;
+    private String document;
 }

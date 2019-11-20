@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.gosarcho</groupId>
-    <artifactId>affairs_query</artifactId>
+    <artifactId>order_documents</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>affairs-query</name>
-    <description>Delivery a affairs</description>
+    <name>order-documents</name>
+    <description>Delivery a documents</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -34,6 +34,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
         </dependency>
 
         <dependency>
