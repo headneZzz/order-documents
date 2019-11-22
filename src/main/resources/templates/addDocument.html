@@ -8,19 +8,28 @@
 <div class="container" style="width: 100%; padding: 10%; margin: auto;">
     <br/>
     <h3>Добавить дело:</h3>
-
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
     <form th:action="@{/addDocument}"
           th:object="${documentForm}"
           method="POST">
         <input type="text" aria-label="Document" class="form-control" placeholder="Фонд Опись Дело"
                autocomplete="off" th:field="*{document}"/>
         <br/>
-        <input type="submit" class="btn btn-primary" id="addB" value="Добавить"
-               onclick="this.disabled='disabled';this.form.submit();">
-
-        <a href="documentsList" class="btn btn-secondary" role="button">Назад</a>
-
+        <div th:unless="${tryAnother}">
+            <input type="submit" class="btn btn-primary" id="addAnother" value="Добавить"
+                   onclick="this.disabled='disabled';this.form.submit();">
+            <a href="documentsList" class="btn btn-secondary" role="button">Назад</a>
+        </div>
     </form>
+    <div th:if="${tryAnother}">
+        <a href="tryAnother" class="btn btn-danger" role="button"
+           onclick="this.disabled='disabled';this.form.submit();">Поискать в архивах</a>
+        <a href="documentsList" class="btn btn-secondary" role="button">Назад</a>
+    </div>
     <br/>
 
     <div th:if="${errorMessage}"

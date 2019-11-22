@@ -15,6 +15,7 @@ import static ru.gosarcho.order_documents.controller.MainController.documentServ
 @Controller
 @RequestMapping("/unload")
 public class UnloadController {
+    static DocumentsFilter unloadFilter;
 
     @RequestMapping(method = RequestMethod.GET)
     public String unloadFromDb(Model model) {
@@ -26,13 +27,12 @@ public class UnloadController {
     @RequestMapping(method = RequestMethod.POST)
     public String unloadFromDbWithFilter(Model model, @ModelAttribute("documentsFilter") DocumentsFilter documentsFilter) {
         if (documentsFilter.getDateFrom().length() == 0)
-            documentsFilter.setDateFrom("1960-01-01");
+            documentsFilter.setDateFrom("2019-11-01");
         if (documentsFilter.getDateTo().length() == 0)
             documentsFilter.setDateTo(LocalDate.now().toString());
 
-        LocalDate dateFrom = LocalDate.parse(documentsFilter.getDateFrom());
-        LocalDate dateTo = LocalDate.parse(documentsFilter.getDateTo());
-        List<Document> documentsFromDb = documentService.getAllByFilter(dateFrom, dateTo, documentsFilter.getReader(), documentsFilter.getExecutor());
+        unloadFilter = documentsFilter;
+        List<Document> documentsFromDb = documentService.getAllByFilter(documentsFilter);
         return unloadSetAttributes(model, documentsFromDb);
     }
 

@@ -3,6 +3,7 @@ package ru.gosarcho.order_documents.service;
 import org.springframework.stereotype.Service;
 import ru.gosarcho.order_documents.entity.Document;
 import ru.gosarcho.order_documents.repository.DocumentRepository;
+import ru.gosarcho.order_documents.util.DocumentsFilter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,8 +20,12 @@ public class DocumentService {
         return repository.findAll();
     }
 
-    public List<Document> getAllByFilter(LocalDate dateFrom, LocalDate dateTo, String reader, String executor) {
-        return repository.findDocumentByReceiptDateBetweenAndReaderLikeAndExecutorLike(dateFrom, dateTo, "%" + reader + "%", "%" + executor + "%");
+    public List<Document> getAllByFilter(DocumentsFilter df) {
+        return repository.findDocumentByReceiptDateBetweenAndReaderLikeAndExecutorLike(
+                LocalDate.parse(df.getDateFrom()),
+                LocalDate.parse(df.getDateTo()),
+                "%" + df.getReader() + "%",
+                "%" + df.getExecutor() + "%");
     }
 
     public void save(Document document) {
