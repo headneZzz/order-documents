@@ -30,7 +30,7 @@ public class TryAnotherController {
             }
         }
         model.addAttribute("errorMessage", "Данного дела нет в архивной базе.");
-        return "addDocument";
+        return "redirect:/addDocument";
     }
 
     private List<File> tempInit() {

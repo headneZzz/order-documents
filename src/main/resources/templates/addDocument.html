@@ -13,6 +13,7 @@
             window.history.replaceState(null, null, window.location.href);
         }
     </script>
+
     <form th:action="@{/addDocument}"
           th:object="${documentForm}"
           method="POST">
@@ -25,16 +26,24 @@
             <a href="documentsList" class="btn btn-secondary" role="button">Назад</a>
         </div>
     </form>
+
     <div th:if="${tryAnother}">
-        <a href="tryAnother" class="btn btn-danger" role="button"
+        <a href="tryAnother" class="btn btn-info" role="button"
            onclick="this.disabled='disabled';this.form.submit();">Поискать в архивах</a>
         <a href="documentsList" class="btn btn-secondary" role="button">Назад</a>
     </div>
+
     <br/>
 
     <div th:if="${errorMessage}"
          th:utext="${errorMessage}"
          class="alert alert-danger" role="alert">
+        ...
+    </div>
+
+    <div th:if="${infoMessage}"
+         th:utext="${infoMessage}"
+         class="alert alert-info" role="alert">
         ...
     </div>
 

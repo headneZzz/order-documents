@@ -31,13 +31,13 @@ public class AddDocumentController {
         document = documentForm.getDocument().split("[ \\-_]");
         if (document.length == 3) {
             List<File> folders = new ArrayList<>();
-            folders.add(new File("I:\\Оцифровка\\Фонды\\"));
             folders.add(new File("I:\\Оцифровка\\КолесниковаЕ\\"));
             folders.add(new File("I:\\Оцифровка\\Степаненко\\"));
             folders.add(new File("I:\\Оцифровка\\Гимодудинов\\"));
 
+            File mainFolder = new File("I:\\Оцифровка\\Фонды");
             //Ищем дело в главной папке
-            File documentsDir = new File(folders.get(0) + document[0] + File.separator + document[1] + File.separator + document[2]);
+            File documentsDir = new File(mainFolder.toString()+ File.separator + document[0] + File.separator + document[1] + File.separator + document[2]);
             if (documentsDir.exists()) {
                 return addAndReturn(new DocumentModel(document[0], document[1], document[2]), Arrays.asList(Objects.requireNonNull(documentsDir.listFiles())), session.getId());
             }
@@ -50,7 +50,7 @@ public class AddDocumentController {
                     return addAndReturn(new DocumentModel(document[0], document[1], document[2]), matchingDocuments, session.getId());
             }
 
-            model.addAttribute("errorMessage", "Данного дела нет в основной базе. Можете поискать в архивах, если уверены, что дело оцифровано (неизвестно, сколько займет времени). Иначе перезагрузите страницу, нажав F5 и введите другое дело");
+            model.addAttribute("infoMessage", "Данного дела нет в основной базе. Попробуйте поискать в архивах, если уверены, что дело оцифровано, или перезагрузите страницу, нажав F5, и введите другое дело");
             model.addAttribute("tryAnother", true);
             return "addDocument";
         }
@@ -61,7 +61,9 @@ public class AddDocumentController {
     static void listForDocs(File directory, List<File> mf) {
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.isFile()) {
-                mf.addAll(Arrays.asList(Objects.requireNonNull(directory.listFiles((dir, name) -> name.startsWith(document[0] + "_" + document[1] + "_" + document[2] + "_")))));
+                if(file.getName().startsWith(document[0] + "_" + document[1] + "_" + document[2] + "_")) {
+                    mf.add(file);
+                }
             } else if (file.isDirectory()) {
                 listForDocs(file, mf);
             }
