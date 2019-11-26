@@ -39,7 +39,9 @@ public class AddDocumentController {
             //Ищем дело в главной папке
             File documentsDir = new File(mainFolder.toString()+ File.separator + document[0] + File.separator + document[1] + File.separator + document[2]);
             if (documentsDir.exists()) {
-                return addAndReturn(new DocumentModel(document[0], document[1], document[2]), Arrays.asList(Objects.requireNonNull(documentsDir.listFiles())), session.getId());
+                return addAndReturn(new DocumentModel(document[0], document[1], document[2]),
+                        Arrays.asList(Objects.requireNonNull(documentsDir.listFiles())),
+                        session.getId());
             }
 
             //Ищем в именных папках
@@ -50,7 +52,8 @@ public class AddDocumentController {
                     return addAndReturn(new DocumentModel(document[0], document[1], document[2]), matchingDocuments, session.getId());
             }
 
-            model.addAttribute("infoMessage", "Данного дела нет в основной базе. Попробуйте поискать в архивах, если уверены, что дело оцифровано, или перезагрузите страницу, нажав F5, и введите другое дело");
+            model.addAttribute("infoMessage", "Данного дела нет в основной базе. Попробуйте поискать в архивах, " +
+                    "если уверены, что дело оцифровано, или перезагрузите страницу, нажав F5, и введите другое дело");
             model.addAttribute("tryAnother", true);
             return "addDocument";
         }
@@ -71,8 +74,8 @@ public class AddDocumentController {
     }
 
     static String addAndReturn(DocumentModel documentModel, List<File> documentsList, String sessionId) {
-        persons.get(sessionId).getDocumentModels().add(documentModel);
-        persons.get(sessionId).getDocumentFiles().addAll(documentsList);
+        sessions.get(sessionId).getDocumentModels().add(documentModel);
+        sessions.get(sessionId).getDocumentFiles().addAll(documentsList);
         return "redirect:/documentsList";
     }
 }

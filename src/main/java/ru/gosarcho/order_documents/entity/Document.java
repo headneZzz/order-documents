@@ -24,27 +24,21 @@ public class Document {
     private Long id;
 
     @Column(name = "fond")
-    @CsvBindByPosition(position = 0)
     private String fond;
 
     @Column(name = "op")
-    @CsvBindByPosition(position = 1)
     private String op;
 
     @Column(name = "document")
-    @CsvBindByPosition(position = 2)
     private String document;
 
     @Column(name = "reader")
-    @CsvBindByPosition(position = 3)
     private String reader;
 
     @Column(name = "executor")
-    @CsvBindByPosition(position = 4)
     private String executor;
 
     @Column(name = "receipt_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @CsvBindByPosition(position = 5)
     private LocalDate receiptDate;
 }

@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<!-- Thymeleaf Namespace -->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Оцифровка</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="/">Новый заказ</a>
+                </li>
+
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Выгрузка
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/unload">Все дела</a>
+                        <a class="dropdown-item" href="/unloadByPop">По популярности</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <br/>
+    <h4 th:utext="${documentsCount}"></h4>
+    <h4 th:utext="${uniqueDocumentsCount}"></h4>
+
+    <!-- Не дает отправлять POST запрос при обновлении страницы -->
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
+    <form th:action="@{/unload}"
+          th:object="${documentsFilter}"
+          method="POST">
+        <p>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">С</span>
+            </div>
+            <input type="date" class="form-control" id="dateFrom" name="dateFrom" th:value="*{dateFrom}"
+                   placeholder="С"/>
+            <div class="input-group-prepend">
+                <span class="input-group-text">По</span>
+            </div>
+            <input type="date" class="form-control" id="dateTo" name="dateTo" th:value="*{dateTo}"
+                   placeholder="По"/>
+            <input type="text" class="form-control" id="reader" name="reader" th:value="*{reader}"
+                   placeholder="Читатель"/>
+            <input type="text" class="form-control" id="executor" name="executor" th:value="*{executor}"
+                   placeholder="Исполнитель"/>
+        </div>
+        </p>
+
+        <p>
+            <input type="submit" class="btn btn-primary" value="Отсортировать">
+            <a class="btn btn-primary" href="exportCSV" role="button">Экспорт в Excel</a>
+        </p>
+    </form>
+
+    <p>
+    <div class="alert alert-warning" role="alert">
+        Отсортируйте данные перед экспортом.
+    </div>
+    </p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Фонд</th>
+            <th>Опись</th>
+            <th>Дело</th>
+            <th>Читатель</th>
+            <th>Исполнитель</th>
+            <th>Дата</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="document : ${documents}">
+            <td th:utext="${document.getFond()}">...</td>
+            <td th:utext="${document.getOp()}">...</td>
+            <td th:utext="${document.getDocument()}">...</td>
+            <td th:utext="${document.getReader()}">...</td>
+            <td th:utext="${document.getExecutor()}">...</td>
+            <td th:utext="${#temporals.format(document.getReceiptDate(),'dd.MM.yyyy')}">...</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
