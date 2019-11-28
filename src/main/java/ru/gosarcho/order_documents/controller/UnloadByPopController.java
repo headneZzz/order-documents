@@ -1,14 +1,17 @@
 package ru.gosarcho.order_documents.controller;
 
+import com.opencsv.CSVWriter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.gosarcho.order_documents.entity.Document;
 import ru.gosarcho.order_documents.util.DocumentsFilter;
 
-import javax.lang.model.element.Element;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +24,7 @@ import static ru.gosarcho.order_documents.controller.MainController.filters;
 @Controller
 @RequestMapping("/unloadByPop")
 public class UnloadByPopController {
+    private ConcurrentHashMap<String, AtomicInteger> docsByPop;
 
     @RequestMapping(method = RequestMethod.GET)
     public String unloadFromDb(Model model) {
@@ -44,14 +48,35 @@ public class UnloadByPopController {
     }
 
     private String unloadSetAttributes(Model model, List<Document> documentsFromDb) {
-        ConcurrentHashMap<String, AtomicInteger> documentsByPop = new ConcurrentHashMap<>();
+        docsByPop = new ConcurrentHashMap<>();
         for (Document document : documentsFromDb) {
             String doc = document.getFond() + ' ' + document.getOp() + ' ' + document.getDocument();
-            documentsByPop.putIfAbsent(doc, new AtomicInteger(0));
-            documentsByPop.get(doc).incrementAndGet();
+            docsByPop.putIfAbsent(doc, new AtomicInteger(0));
+            docsByPop.get(doc).incrementAndGet();
         }
-        model.addAttribute("documentsByPop", documentsByPop);
-        model.addAttribute("documentsCount", "Всего дел: " + documentsByPop.size());
+        model.addAttribute("documentsByPop", docsByPop);
+        model.addAttribute("documentsCount", "Всего дел: " + docsByPop.size());
         return "unloadByPop";
+    }
+
+    @GetMapping("/exportCSV")
+    public void exportCsv(HttpServletResponse response) throws Exception {
+        String filename = "documentsByPop.csv";
+        response.setContentType("text/csv; charset=cp1251");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+
+        CSVWriter writer = new CSVWriter(response.getWriter(), ';',
+                CSVWriter.NO_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END);
+        String[] head = {"Дело", "Кол-во заказов"};
+        writer.writeNext(head);
+
+        List<Map.Entry> entryList = new ArrayList<>(docsByPop.entrySet());
+        List<String[]> docs = new ArrayList<>();
+        for (Map.Entry entry:entryList) {
+            docs.add(entry.toString().split("="));
+        }
+        writer.writeAll(docs);
     }
 }
