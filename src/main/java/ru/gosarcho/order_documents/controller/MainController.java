@@ -12,6 +12,7 @@ class MainController {
     static HashMap<String, SessionModel> sessions = new HashMap<>();
     static HashMap<String, DocumentsFilter> filters = new HashMap<>();
     static DocumentService documentService;
+
     public MainController(DocumentService documentService) {
         MainController.documentService = documentService;
     }

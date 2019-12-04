@@ -24,7 +24,7 @@ public class TryAnotherController {
         List<File> tempFileList = tempInit();
         for (File file : tempFileList) {
             List<File> matchingDocuments = new ArrayList<>();
-            listForDocs(file,matchingDocuments);
+            listForDocs(file, matchingDocuments);
             if (matchingDocuments.size() > 0) {
                 return addAndReturn(new DocumentModel(document[0], document[1], document[2]), matchingDocuments, session.getId());
             }

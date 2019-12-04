@@ -37,7 +37,7 @@ public class AddDocumentController {
 
             File mainFolder = new File("I:\\Оцифровка\\Фонды");
             //Ищем дело в главной папке
-            File documentsDir = new File(mainFolder.toString()+ File.separator + document[0] + File.separator + document[1] + File.separator + document[2]);
+            File documentsDir = new File(mainFolder.toString() + File.separator + document[0] + File.separator + document[1] + File.separator + document[2]);
             if (documentsDir.exists()) {
                 return addAndReturn(new DocumentModel(document[0], document[1], document[2]),
                         Arrays.asList(Objects.requireNonNull(documentsDir.listFiles())),
@@ -64,7 +64,7 @@ public class AddDocumentController {
     static void listForDocs(File directory, List<File> mf) {
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.isFile()) {
-                if(file.getName().startsWith(document[0] + "_" + document[1] + "_" + document[2] + "_")) {
+                if (file.getName().startsWith(document[0] + "_" + document[1] + "_" + document[2] + "_")) {
                     mf.add(file);
                 }
             } else if (file.isDirectory()) {

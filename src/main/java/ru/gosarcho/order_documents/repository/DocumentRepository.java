@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
-    List<Document> findDocumentByReceiptDateBetweenAndReaderLikeAndExecutorLike(LocalDate dateFrom, LocalDate dateTo, String reader, String executor);
+    List<Document> findAllByReceiptDateBetweenAndReaderLikeAndExecutorLikeOrderByReceiptDate(LocalDate dateFrom, LocalDate dateTo, String reader, String executor);
 }

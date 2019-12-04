@@ -67,7 +67,7 @@ public class UnloadController {
                 .withSeparator(';')
                 .withOrderedResults(false)
                 .build();
-        Document head = new Document(0L,"Фонд","Опись","Дело","Читатель","Исполнитель", null);
+        Document head = new Document(0L, "Фонд", "Опись", "Дело", "Читатель", "Исполнитель", null);
         writer.write(head);
         writer.write(documentService.getAllByFilter(filters.get(session.getId())));
     }

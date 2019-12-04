@@ -11,12 +11,9 @@ import ru.gosarcho.order_documents.util.DocumentsFilter;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 
+import static java.util.stream.Collectors.*;
 import static ru.gosarcho.order_documents.controller.MainController.documentService;
 import static ru.gosarcho.order_documents.controller.MainController.filters;
 
@@ -24,7 +21,7 @@ import static ru.gosarcho.order_documents.controller.MainController.filters;
 @Controller
 @RequestMapping("/unloadByPop")
 public class UnloadByPopController {
-    private ConcurrentHashMap<String, AtomicInteger> docsByPop;
+    private Map<String, Integer> docsByPop;
 
     @RequestMapping(method = RequestMethod.GET)
     public String unloadFromDb(Model model) {
@@ -48,12 +45,19 @@ public class UnloadByPopController {
     }
 
     private String unloadSetAttributes(Model model, List<Document> documentsFromDb) {
-        docsByPop = new ConcurrentHashMap<>();
+        Map<String,Integer> tempMap = new HashMap<>();
         for (Document document : documentsFromDb) {
             String doc = document.getFond() + ' ' + document.getOp() + ' ' + document.getDocument();
-            docsByPop.putIfAbsent(doc, new AtomicInteger(0));
-            docsByPop.get(doc).incrementAndGet();
+            tempMap.merge(doc, 1, Integer::sum);
         }
+
+        //Sort by value
+        docsByPop = tempMap
+                .entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+
         model.addAttribute("documentsByPop", docsByPop);
         model.addAttribute("documentsCount", "Всего дел: " + docsByPop.size());
         return "unloadByPop";
@@ -74,7 +78,7 @@ public class UnloadByPopController {
 
         List<Map.Entry> entryList = new ArrayList<>(docsByPop.entrySet());
         List<String[]> docs = new ArrayList<>();
-        for (Map.Entry entry:entryList) {
+        for (Map.Entry entry : entryList) {
             docs.add(entry.toString().split("="));
         }
         writer.writeAll(docs);

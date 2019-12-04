@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "documents")
+@Table(name = "orders")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
