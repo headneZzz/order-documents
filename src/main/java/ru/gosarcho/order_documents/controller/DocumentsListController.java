@@ -29,7 +29,6 @@ public class DocumentsListController {
         return "documentsList";
     }
 
-
     @RequestMapping(method = RequestMethod.POST)
     public String saveAndLoadDocumentsList(HttpSession session) {
         String readingRoom = "I:\\Читальный зал\\";

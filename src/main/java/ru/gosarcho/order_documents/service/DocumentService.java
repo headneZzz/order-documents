@@ -21,7 +21,7 @@ public class DocumentService {
     }
 
     public List<Document> getAllByFilter(DocumentsFilter df) {
-        return repository.findAllByReceiptDateBetweenAndReaderLikeAndExecutorLikeOrderByReceiptDate(
+        return repository.findAllByReceiptDateBetweenAndReaderLikeAndExecutorLikeOrderByReceiptDateDesc(
                 LocalDate.parse(df.getDateFrom()),
                 LocalDate.parse(df.getDateTo()),
                 "%" + df.getReader() + "%",

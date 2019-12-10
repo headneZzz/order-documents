@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<!-- Thymeleaf Namespace -->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div class="container">
+    <div th:replace="fragments/header :: header"></div>
+    <br/>
+    <!-- Не дает отправлять POST запрос при обновлении страницы -->
+    <a class="btn btn-primary" href="/unloadJournal/refresh" role="button">Обновить</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Фод</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="document : ${digitDocsFromDb}">
+            <td th:utext="${document[0]}">...</td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${errorMessage}"
+         th:utext="${errorMessage}"
+         class="alert alert-danger" role="alert">
+        ...
+    </div>
+</div>
+<div th:replace="fragments/scripts::scripts"></div>
+</body>
+</html>
