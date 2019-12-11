@@ -6,17 +6,28 @@
 <div class="container">
     <div th:replace="fragments/header :: header"></div>
     <br/>
-    <!-- Не дает отправлять POST запрос при обновлении страницы -->
+    <h4>Сводный журнал оцифрованных дел</h4>
     <a class="btn btn-primary" href="/unloadJournal/refresh" role="button">Обновить</a>
+    <br/>
     <table class="table">
         <thead>
         <tr>
-            <th>Фод</th>
+            <th>№ п/п</th>
+            <th>Фонд, опись, дело</th>
+            <th>Исполнитель</th>
+            <th>Дата оцифровывания</th>
+            <th>Кол-во файлов</th>
+            <th>Кол-во Мб</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="document : ${digitDocsFromDb}">
             <td th:utext="${document[0]}">...</td>
+            <td th:utext="${document[1]}">...</td>
+            <td th:utext="${document[2]}">...</td>
+            <td th:utext="${document[3]}">...</td>
+            <td th:utext="${document[4]}">...</td>
+            <td th:utext="${document[5]}">...</td>
         </tr>
         </tbody>
     </table>
