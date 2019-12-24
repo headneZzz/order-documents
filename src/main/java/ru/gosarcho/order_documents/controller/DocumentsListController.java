@@ -21,12 +21,19 @@ import static ru.gosarcho.order_documents.controller.MainController.*;
 public class DocumentsListController {
     @RequestMapping(method = RequestMethod.GET)
     public String documentsList(Model model, HttpSession session) {
-        model.addAttribute("person", sessions.get(session.getId()).getReaderFullName());
-        model.addAttribute("documents", sessions.get(session.getId()).getDocumentModels());
-        if (sessions.get(session.getId()).getDocumentModels().size() != 0) {
-            model.addAttribute("isSending", true);
+        try {
+            model.addAttribute("person", sessions.get(session.getId()).getReaderFullName());
+            model.addAttribute("documents", sessions.get(session.getId()).getDocumentModels());
+            if (sessions.get(session.getId()).getDocumentModels().size() != 0) {
+                model.addAttribute("isSending", true);
+            }
+            return "documentsList";
+        } catch (NullPointerException e) {
+            if (sessions.get(session.getId()) == null)
+                System.out.println("SESSION DON'T EXIST!");
+            else e.printStackTrace();
+            return "redirect:/index";
         }
-        return "documentsList";
     }
 
     @RequestMapping(method = RequestMethod.POST)

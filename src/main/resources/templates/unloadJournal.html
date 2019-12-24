@@ -7,8 +7,40 @@
     <div th:replace="fragments/header :: header"></div>
     <br/>
     <h4>Сводный журнал оцифрованных дел</h4>
-    <a class="btn btn-primary" href="/unloadJournal/refresh" role="button">Обновить</a>
-    <br/>
+
+    <!-- Не дает отправлять POST запрос при обновлении страницы -->
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
+    <form th:action="@{/unloadJournal}"
+          th:object="${documentsFilter}"
+          method="POST">
+        <p>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">С</span>
+            </div>
+            <input type="date" class="form-control" id="dateFrom" name="dateFrom" th:value="*{dateFrom}"
+                   placeholder="С"/>
+            <div class="input-group-prepend">
+                <span class="input-group-text">По</span>
+            </div>
+            <input type="date" class="form-control" id="dateTo" name="dateTo" th:value="*{dateTo}"
+                   placeholder="По"/>
+            <input type="text" class="form-control" id="executor" name="executor" th:value="*{executor}"
+                   placeholder="Исполнитель"/>
+        </div>
+        </p>
+
+        <p>
+            <input type="submit" class="btn btn-primary" value="Отсортировать">
+            <a class="btn btn-primary" href="/unloadJournal/exportCSV" role="button">Экспорт в Excel</a>
+            <a class="btn btn-primary" href="/unloadJournal/refresh" role="button">Обновить</a>
+        </p>
+    </form>
     <table class="table">
         <thead>
         <tr>

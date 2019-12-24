@@ -1,16 +1,29 @@
 package ru.gosarcho.order_documents.controller;
 
+import com.opencsv.CSVWriter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ru.gosarcho.order_documents.entity.Document;
+import ru.gosarcho.order_documents.util.DocumentsFilter;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.*;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+
+import static ru.gosarcho.order_documents.controller.MainController.documentService;
+import static ru.gosarcho.order_documents.controller.MainController.filters;
 
 @Controller
 @RequestMapping("/unloadJournal")
@@ -19,31 +32,63 @@ public class UnloadJournalController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String unloadFromDb(Model model) {
+        connectToDbAndSetList(
+                "SELECT сж.Номер, сж.ФОД, и.Исполнитель, сж.Дата_оцифровки, сж.Колво_файлов, сж.Колво_мб " +
+                "FROM digitization.Сводный_журнал сж " +
+                "INNER JOIN digitization.Исполнители и ON сж.Исполнитель = и.Код_исполнителя");
+        model.addAttribute("documentsFilter", new DocumentsFilter());
+        model.addAttribute("digitDocsFromDb", digitDocsFromDb);
+        return "unloadJournal";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String unloadFromDbWithFilter(Model model, @ModelAttribute("documentsFilter") DocumentsFilter documentsFilter) {
+        connectToDbAndSetList(
+                "SELECT сж.Номер, сж.ФОД, и.Исполнитель, сж.Дата_оцифровки, сж.Колво_файлов, сж.Колво_мб " +
+                        "FROM digitization.Сводный_журнал сж " +
+                        "INNER JOIN digitization.Исполнители и ON сж.Исполнитель = и.Код_исполнителя " +
+                        "WHERE (сж.Дата_оцифровки BETWEEN " + documentsFilter.getDateFrom() + " AND " + documentsFilter.getDateTo() + ") " +
+                        "AND и.Исполнитель LIKE '%" + documentsFilter.getExecutor()+"%'");
+        model.addAttribute("digitDocsFromDb", digitDocsFromDb);
+        return "unloadJournal";
+    }
+
+    private void connectToDbAndSetList(String SQL) {
+        digitDocsFromDb.clear();
+        DecimalFormat form = new DecimalFormat("0.00");
         String url = "jdbc:postgresql://server:5433/archive";
         try (Connection connection = DriverManager.getConnection(url, "admin", "adminus")) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT сж.Номер, сж.ФОД, и.Исполнитель, сж.Дата_оцифровки, сж.Колво_файлов, сж.Колво_мб " +
-                            "FROM digitization.Сводный_журнал сж " +
-                            "INNER JOIN digitization.Исполнители и ON сж.Исполнитель = и.Код_исполнителя");
+            ResultSet resultSet = statement.executeQuery(SQL);
             while (resultSet.next()) {
                 String[] names = resultSet.getString(2).split("_");
                 String newName = "Ф." + names[0] + ". Оп." + names[1] + ". Д." + names[2];
-                double size = Math.round(resultSet.getDouble(6) * 100.0) / 100.0;
                 digitDocsFromDb.add(new String[]{
                         String.valueOf(resultSet.getInt(1)),
                         newName,
                         resultSet.getString(3),
                         String.valueOf(resultSet.getDate(4)),
                         String.valueOf(resultSet.getInt(5)),
-                        String.valueOf(size)});
+                        form.format(resultSet.getDouble(6))});
             }
         } catch (SQLException e) {
-            model.addAttribute("errorMessage", "Ошибка подлючения к базе данных");
             e.printStackTrace();
         }
-        model.addAttribute("digitDocsFromDb", digitDocsFromDb);
-        return "unloadJournal";
+    }
+
+    @GetMapping("/exportCSV")
+    public void exportCsv(HttpServletResponse response) throws Exception {
+        String filename = "journal.csv";
+        response.setContentType("text/csv; charset=cp1251");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+
+        CSVWriter writer = new CSVWriter(response.getWriter(), ';',
+                CSVWriter.NO_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END);
+        String[] head = {"№ п/п", "Фонд, опись, дело", "Исполнитель", "Дата оцифровывания", "Кол-во файлов", "Кол-во Мб"};
+        writer.writeNext(head);
+        writer.writeAll(digitDocsFromDb);
     }
 
     @GetMapping("/refresh")
@@ -81,7 +126,6 @@ public class UnloadJournalController {
                         filesCount = 0;
                         sizeInBytes = 0;
                         File docInFonds = new File(resultSet.getString("Ссылка").substring(1));
-                        System.out.println(docInFonds.getParentFile());
                         for (File file : Objects.requireNonNull(docInFonds.getParentFile().listFiles())) {
                             sizeInBytes += file.length();
                             filesCount += 1;
@@ -97,7 +141,7 @@ public class UnloadJournalController {
                         prst.executeUpdate();
                     }
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    System.out.println(" - " + resultSet.getString("Имя_файла"));
                 }
             }
         } catch (SQLException e) {
