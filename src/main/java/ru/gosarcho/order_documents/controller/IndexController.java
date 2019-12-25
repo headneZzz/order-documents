@@ -23,9 +23,9 @@ public class IndexController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String newPerson(Model model, @ModelAttribute("personForm") PersonForm personForm, HttpSession session) {
-        String reader = personForm.getReaderLastName();
-        String executor = personForm.getExecutorLastName();
-        if (reader != null && reader.length() > 0 && executor != null && executor.length() > 0) {
+        String reader = personForm.getReaderLastName().trim();
+        String executor = personForm.getExecutorLastName().trim();
+        if (reader.length() > 0  && executor.length() > 0) {
             sessions.put(session.getId(), new SessionModel(reader, executor));
             return "redirect:/documentsList";
         }
