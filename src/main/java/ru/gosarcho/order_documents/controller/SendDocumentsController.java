@@ -2,6 +2,7 @@ package ru.gosarcho.order_documents.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.gosarcho.order_documents.entity.Document;
@@ -17,28 +18,16 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static ru.gosarcho.order_documents.controller.MainController.*;
 
 @Controller
-@RequestMapping("/documentsList")
-public class DocumentsListController {
-    @RequestMapping(method = RequestMethod.GET)
-    public String documentsList(Model model, HttpSession session) {
-        try {
-            model.addAttribute("person", sessions.get(session.getId()).getReaderFullName());
-            model.addAttribute("documents", sessions.get(session.getId()).getDocumentModels());
-            if (sessions.get(session.getId()).getDocumentModels().size() != 0) {
-                model.addAttribute("isSending", true);
-            }
-            return "documentsList";
-        } catch (NullPointerException e) {
-            if (sessions.get(session.getId()) == null)
-                System.out.println("SESSION DON'T EXIST!");
-            else e.printStackTrace();
-            return "redirect:/index";
-        }
+public class SendDocumentsController {
+    @GetMapping("/load")
+    public String loadScreen() {
+        return "load";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @GetMapping("/send")
     public String saveAndLoadDocumentsList(HttpSession session) {
         String readingRoom = "I:\\Читальный зал\\";
+        if (sessions.get(session.getId()) == null) System.out.println("CANT SEND!");
         //Отправка файлов
         for (File doc : sessions.get(session.getId()).getDocumentFiles()) {
             try {
@@ -47,7 +36,10 @@ public class DocumentsListController {
                         + File.separator + cutName[0] + "_" + cutName[1] + "_" + cutName[2]);
                 out.mkdirs();
                 Files.copy(doc.toPath(), new File(out.toString() + File.separator + doc.getName()).toPath(), REPLACE_EXISTING);
-            } catch (IOException e) {
+            } catch (IOException | ArrayIndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("THIS FILE NAME: " + doc.getName());
+                System.out.println(sessions.get(session.getId()).getDocumentModels().toString());
+                System.out.println("SIZE: " + sessions.get(session.getId()).getDocumentFiles().size());
                 e.printStackTrace();
             }
         }
@@ -65,6 +57,6 @@ public class DocumentsListController {
         sessions.get(session.getId()).getDocumentModels().clear();
         sessions.get(session.getId()).getDocumentFiles().clear();
         sessions.remove(session.getId());
-        return "load";
+        return "redirect:/index";
     }
 }

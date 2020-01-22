@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<!-- Thymeleaf Namespace -->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+<div class="container">
+    <div th:replace="fragments/header :: header"></div>
+    <br/>
+    <h4>Список дел для: </h4>
+    <h4 th:utext="${person}"></h4>
+    <h6>Теперь весь список дел можно ввести сразу. Каждое новое дело вводить на следующей строчке.<br>
+        Пример:<br>
+        000 1грсф 1270<br>
+        803 1 197<br>
+        000 1кдф 11655<br></h6>
+    <form th:action="@{/addDocuments}"
+          th:object="${documentsForm}"
+          method="POST">
+        <div class="form-group">
+            <label for="textarea1">Введите дела:</label>
+            <textarea class="form-control" id="textarea1" rows="20" placeholder="Фонд Опись Дело"
+                      th:field="*{documents}"></textarea>
+        </div>
+
+        <br/>
+        <input type="submit" class="btn btn-primary btn-lg btn-block" id="sendButton" value="Отправить"
+               onclick="this.disabled='disabled';this.form.submit();"/>
+    </form>
+    <br/>
+    <div th:if="${errorMessage}"
+         th:utext="${errorMessage}"
+         class="alert alert-danger" role="alert">
+        ...
+    </div>
+</div>
+<div th:replace="fragments/scripts::scripts"></div>
+</body>
+</html>

@@ -8,22 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.gosarcho.order_documents.entity.Document;
 import ru.gosarcho.order_documents.util.DocumentsFilter;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.*;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-
-import static ru.gosarcho.order_documents.controller.MainController.documentService;
-import static ru.gosarcho.order_documents.controller.MainController.filters;
 
 @Controller
 @RequestMapping("/unloadJournal")

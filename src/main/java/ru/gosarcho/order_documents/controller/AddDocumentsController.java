@@ -3,7 +3,7 @@ package ru.gosarcho.order_documents.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.gosarcho.order_documents.form.DocumentForm;
+import ru.gosarcho.order_documents.form.DocumentsForm;
 import ru.gosarcho.order_documents.model.DocumentModel;
 
 import javax.servlet.http.HttpSession;
@@ -16,55 +16,78 @@ import java.util.Objects;
 import static ru.gosarcho.order_documents.controller.MainController.*;
 
 @Controller
-@RequestMapping("/addDocument")
-public class AddDocumentController {
+@RequestMapping("/addDocuments")
+public class AddDocumentsController {
     @RequestMapping(method = RequestMethod.GET)
-    public String showAddDocumentPage(Model model) {
-        model.addAttribute("documentForm", new DocumentForm());
-        return "addDocument";
+    public String showAddDocumentPage(Model model, HttpSession session) {
+        try {
+            model.addAttribute("person", sessions.get(session.getId()).getReaderFullName());
+            model.addAttribute("documentsForm", new DocumentsForm());
+        } catch (NullPointerException e) {
+            if (sessions.get(session.getId()) != null)
+                e.printStackTrace();
+            return "redirect:/index";
+        }
+        return "addDocuments";
     }
-
-    private String[] document;
 
     @RequestMapping(method = RequestMethod.POST)
-    public String saveDocument(Model model, @ModelAttribute("documentForm") DocumentForm documentForm, HttpSession session) {
-        document = documentForm.getDocument().split("[ \\-_]");
-        if (document.length == 3) {
-            //Ищем дело в главной папке
-            File documentsDir = new File("I:\\Оцифровка\\Фонды" + File.separator + document[0] + File.separator + document[1] + File.separator + document[2]);
-            if (documentsDir.exists()) {
-                return addAndReturn(new DocumentModel(document[0], document[1], document[2]),
-                        Arrays.asList(Objects.requireNonNull(documentsDir.listFiles())),
-                        session.getId());
+    public String saveDocument(Model model, @ModelAttribute("documentsForm") DocumentsForm documentsForm, HttpSession session) {
+        model.addAttribute("person", sessions.get(session.getId()).getReaderFullName());
+        List<String> documentsNotFound = new ArrayList<>();
+        String[] documents = documentsForm.getDocuments().split("\n");
+        for (String doc : documents) {
+            String[] document = doc.trim().split(" ");
+            if (document.length != 3) {
+                model.addAttribute("errorMessage", "Неправильно расставлены пробелы в " + doc);
+                return "addDocuments";
             }
+
+            //Ищем дело в главной папке
+            File documentsDir = new File("I:\\Оцифровка\\Фонды\\" + document[0] + File.separator + document[1] + File.separator + document[2]);
+            if (documentsDir.exists()) {
+                sessions.get(session.getId()).getDocumentModels().add(new DocumentModel(document[0], document[1], document[2]));
+                sessions.get(session.getId()).getDocumentFiles().addAll(Arrays.asList(Objects.requireNonNull(documentsDir.listFiles())));
+                continue;
+            }
+
             //Ищем в именных папках
             List<File> folders = foldersInit();
-            List<File> matchingDocuments = new ArrayList<>();
+            List<File> matchingFiles = new ArrayList<>();
+            boolean isFound = false;
             for (File folder : folders) {
-                listForDocs(folder, matchingDocuments);
-                if (matchingDocuments.size() > 0)
-                    return addAndReturn(new DocumentModel(document[0], document[1], document[2]), matchingDocuments, session.getId());
+                searchFiles(folder, matchingFiles, document);
+                if (matchingFiles.size() > 0) {
+                    sessions.get(session.getId()).getDocumentModels().add(new DocumentModel(document[0], document[1], document[2]));
+                    sessions.get(session.getId()).getDocumentFiles().addAll(matchingFiles);
+                    isFound = true;
+                    break;
+                }
             }
-            model.addAttribute("errorMessage", "Данного дела нет в базе.");
+            if (!isFound) documentsNotFound.add(doc);
         }
-        model.addAttribute("errorMessage", "Все поля должны быть заполнены правильно");
-        return "addDocument";
+        if (documentsNotFound.size() > 0) {
+            model.addAttribute("errorMessage", documentsNotFound + " нет в базе.");
+            return "addDocuments";
+        }
+        return "redirect:/load";
     }
 
-    private void listForDocs(File directory, List<File> mf) {
+    private void searchFiles(File directory, List<File> matchingFiles, String[] document) {
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.isFile()) {
                 if (file.getName().startsWith(document[0] + "_" + document[1] + "_" + document[2] + "_")) {
-                    mf.add(file);
+                    matchingFiles.add(file);
                 }
             } else if (file.isDirectory()) {
-                listForDocs(file, mf);
+                searchFiles(file, matchingFiles, document);
             }
         }
     }
 
     private List<File> foldersInit() {
         List<File> foldersList = new ArrayList<>();
+        foldersList.add(new File("D:\\test\\"));
         foldersList.add(new File("I:\\Оцифровка\\КолесниковаЕ\\"));
         foldersList.add(new File("I:\\Оцифровка\\Степаненко\\"));
         foldersList.add(new File("I:\\Оцифровка\\Гимодудинов\\"));
@@ -92,12 +115,6 @@ public class AddDocumentController {
         foldersList.add(new File("I:\\Оцифровка\\КолесниковаЕ_архив2\\"));
 
         return foldersList;
-    }
-
-    private String addAndReturn(DocumentModel documentModel, List<File> documentsList, String sessionId) {
-        sessions.get(sessionId).getDocumentModels().add(documentModel);
-        sessions.get(sessionId).getDocumentFiles().addAll(documentsList);
-        return "redirect:/documentsList";
     }
 }
 

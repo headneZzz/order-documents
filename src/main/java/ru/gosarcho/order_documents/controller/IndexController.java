@@ -27,7 +27,7 @@ public class IndexController {
         String executor = personForm.getExecutorLastName().trim();
         if (reader.length() > 0  && executor.length() > 0) {
             sessions.put(session.getId(), new SessionModel(reader, executor));
-            return "redirect:/documentsList";
+            return "redirect:/addDocuments";
         }
         model.addAttribute("errorMessage", "Все поля должны быть заполнены");
         return "index";

@@ -1,6 +1,5 @@
 package ru.gosarcho.order_documents.entity;
 
-import com.opencsv.bean.CsvBindByPosition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
