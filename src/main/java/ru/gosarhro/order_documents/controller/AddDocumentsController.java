@@ -1,10 +1,10 @@
-package ru.gosarcho.order_documents.controller;
+package ru.gosarhro.order_documents.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.gosarcho.order_documents.form.DocumentsForm;
-import ru.gosarcho.order_documents.model.DocumentModel;
+import ru.gosarhro.order_documents.form.DocumentsForm;
+import ru.gosarhro.order_documents.model.DocumentModel;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -13,16 +13,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static ru.gosarcho.order_documents.controller.MainController.*;
+import static ru.gosarhro.order_documents.controller.MainController.*;
 
 @Controller
 @RequestMapping("/addDocuments")
 public class AddDocumentsController {
+    private List<File> folders;
+
     @RequestMapping(method = RequestMethod.GET)
     public String showAddDocumentPage(Model model, HttpSession session) {
         try {
             model.addAttribute("person", sessions.get(session.getId()).getReaderFullName());
             model.addAttribute("documentsForm", new DocumentsForm());
+            folders = foldersInit();
         } catch (NullPointerException e) {
             if (sessions.get(session.getId()) != null)
                 e.printStackTrace();
@@ -52,11 +55,16 @@ public class AddDocumentsController {
             }
 
             //Ищем в именных папках
-            List<File> folders = foldersInit();
             List<File> matchingFiles = new ArrayList<>();
             boolean isFound = false;
             for (File folder : folders) {
-                searchFiles(folder, matchingFiles, document);
+                try {
+                    searchFiles(folder, matchingFiles, document);
+                } catch (NullPointerException e) {
+                    System.out.println(folder);
+                    System.out.println("Files: " + Objects.requireNonNull(folder.listFiles()).length);
+                    e.printStackTrace();
+                }
                 if (matchingFiles.size() > 0) {
                     sessions.get(session.getId()).getDocumentModels().add(new DocumentModel(document[0], document[1], document[2]));
                     sessions.get(session.getId()).getDocumentFiles().addAll(matchingFiles);
@@ -87,10 +95,10 @@ public class AddDocumentsController {
 
     private List<File> foldersInit() {
         List<File> foldersList = new ArrayList<>();
-        foldersList.add(new File("D:\\test\\"));
         foldersList.add(new File("I:\\Оцифровка\\КолесниковаЕ\\"));
         foldersList.add(new File("I:\\Оцифровка\\Степаненко\\"));
         foldersList.add(new File("I:\\Оцифровка\\Гимодудинов\\"));
+        foldersList.add(new File("I:\\Оцифровка\\Стасюкевич\\"));
 
         foldersList.add(new File("I:\\Оцифровка\\FotoArh2\\"));
 

@@ -1,4 +1,4 @@
-package ru.gosarcho.order_documents.dto;
+package ru.gosarhro.order_documents.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

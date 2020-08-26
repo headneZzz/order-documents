@@ -1,4 +1,4 @@
-package ru.gosarcho.order_documents.controller;
+package ru.gosarhro.order_documents.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import ru.gosarcho.order_documents.form.PersonForm;
-import ru.gosarcho.order_documents.model.SessionModel;
-
-import static ru.gosarcho.order_documents.controller.MainController.*;
+import ru.gosarhro.order_documents.form.PersonForm;
+import ru.gosarhro.order_documents.model.SessionModel;
 
 @Controller
 @RequestMapping({"/", "index"})
@@ -26,7 +24,7 @@ public class IndexController {
         String reader = personForm.getReaderLastName().trim();
         String executor = personForm.getExecutorLastName().trim();
         if (reader.length() > 0  && executor.length() > 0) {
-            sessions.put(session.getId(), new SessionModel(reader, executor));
+            MainController.sessions.put(session.getId(), new SessionModel(reader, executor));
             return "redirect:/addDocuments";
         }
         model.addAttribute("errorMessage", "Все поля должны быть заполнены");

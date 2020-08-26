@@ -1,7 +1,7 @@
-package ru.gosarcho.order_documents.model;
+package ru.gosarhro.order_documents.model;
 
 import lombok.Data;
-import ru.gosarcho.order_documents.util.DocumentsFilter;
+import ru.gosarhro.order_documents.util.DocumentsFilter;
 
 import java.io.File;
 import java.util.ArrayList;

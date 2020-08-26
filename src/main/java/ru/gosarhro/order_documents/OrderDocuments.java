@@ -1,4 +1,4 @@
-package ru.gosarcho.order_documents;
+package ru.gosarhro.order_documents;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package ru.gosarcho.order_documents.entity;
+package ru.gosarhro.order_documents.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
