@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/archive
+    password: password
+  thymeleaf:
+    cache: false
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  main:
+    banner-mode: off
+server:
+  port: 8081
+
+app:
+  config:
+    main-digit-folder-path: D:\ГосАрхив\Тест\Оцифровка
+    reading-room-path: D:\ГосАрхив\Тест\Читальный зал
+    reader-folders-path: D:\ГосАрхив\Тест

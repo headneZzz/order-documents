@@ -68,8 +68,8 @@
             <td th:utext="${document.getFond()}">...</td>
             <td th:utext="${document.getOp()}">...</td>
             <td th:utext="${document.getDocument()}">...</td>
-            <td th:utext="${document.getReader()}">...</td>
-            <td th:utext="${document.getExecutor()}">...</td>
+            <td th:utext="${document.getReader().getFullName()}">...</td>
+            <td th:utext="${document.getExecutor().getName()}">...</td>
             <td th:utext="${#temporals.format(document.getReceiptDate(),'dd.MM.yyyy')}">...</td>
         </tr>
         </tbody>

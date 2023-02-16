@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<!-- Thymeleaf Namespace -->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head}"></head>
+
+<body>
+<div class="container">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <br/>
+    <div class="jumbotron">
+        <h2>Читальный зал</h2>
+        <br/>
+        <!-- Не дает отправлять POST запрос при обновлении страницы -->
+        <script>
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        </script>
+
+        <form th:action="@{/}"
+              th:object="${loginForm}"
+              method="POST">
+
+            <label for="reader-full-name">Читатель</label>
+            <input type="text" aria-label="Full name" class="form-control" placeholder="Иванов Иван Иванович"
+                   autocomplete="off" th:field="*{readerFullName}" id="reader-full-name"/>
+            <br/>
+
+            <label for="executor-select">Сотрудник</label>
+            <select class="form-control" th:field="*{executor}" id="executor-select">
+                <option th:each="executor : ${executors}"
+                th:field="*{executor}"
+                th:value="${executor.code}"
+                th:text="${executor.name}">Part name and serial No.
+                </option>
+            </select>
+
+            <br/>
+            <label for="theme">Тематика</label>
+            <input type="text" aria-label="Theme" class="form-control" placeholder="Генеалогия"
+                   autocomplete="on" th:field="*{theme}" id="theme"/>
+            <br/>
+            <input class="btn btn-lg btn-primary" type="submit" value="Далее &raquo;"
+                   onclick="this.disabled='disabled';this.form.submit();"/>
+        </form>
+        <br/>
+        <div th:if="${errorMessage}"
+             th:utext="${errorMessage}"
+             class="alert alert-danger" role="alert">
+            ...
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/scripts::scripts}"></div>
+</body>
+</html>
