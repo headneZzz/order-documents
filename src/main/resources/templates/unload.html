@@ -64,16 +64,27 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="document : ${documents}">
+        <tr th:each="document : ${ordersPage.content}">
             <td th:utext="${document.getFond()}">...</td>
             <td th:utext="${document.getOp()}">...</td>
             <td th:utext="${document.getDocument()}">...</td>
-            <td th:utext="${document.getReader().getFullName()}">...</td>
-            <td th:utext="${document.getExecutor().getName()}">...</td>
+            <td th:utext="${document.getReader()?.getFullName()}">...</td>
+            <td th:utext="${document.getExecutor()?.getName()}">...</td>
             <td th:utext="${#temporals.format(document.getReceiptDate(),'dd.MM.yyyy')}">...</td>
         </tr>
         </tbody>
     </table>
+
+    <nav th:if="${ordersPage.totalPages > 0}">
+        <ul class="pagination">
+            <li th:each="i: ${#numbers.sequence(0, ordersPage.totalPages - 1)}" class="page-item">
+                <a th:href="@{/unload(size=${ordersPage.size}, page=${i})}"
+                   th:text="${i + 1}"
+                   class="page-link"></a>
+            </li>
+        </ul>
+    </nav>
+
 </div>
 <div th:replace="fragments/scripts::scripts"></div>
 </body>

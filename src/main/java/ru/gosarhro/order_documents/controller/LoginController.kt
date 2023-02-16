@@ -18,7 +18,7 @@ import ru.gosarhro.order_documents.util.SessionHolder
 class LoginController(private val loginService: LoginService) {
 
     @GetMapping
-    fun index(model: Model): String {
+    fun login(model: Model): String {
         val loginForm = LoginForm()
         val executors = loginService.getExecutors()
         model.addAttribute("loginForm", loginForm)
@@ -26,8 +26,14 @@ class LoginController(private val loginService: LoginService) {
         return "login"
     }
 
+    @GetMapping("/logout")
+    fun logout(model: Model, session: HttpSession): String {
+        SessionHolder.clearSession(session.id)
+        return login(model)
+    }
+
     @PostMapping
-    fun newReader(model: Model, @ModelAttribute("loginForm") loginForm: LoginForm, session: HttpSession): String {
+    fun login(model: Model, @ModelAttribute("loginForm") loginForm: LoginForm, session: HttpSession): String {
         val readerFullName = loginForm.readerFullName.trim { it <= ' ' }
         val executor = loginForm.executor
         if (readerFullName.isEmpty() || executor == Executor()) {
@@ -40,6 +46,6 @@ class LoginController(private val loginService: LoginService) {
         }
         val reader = loginService.getReader(readerFullName)
         SessionHolder.sessions[session.id] = SessionModel(reader, executor)
-        return "redirect:/order"
+        return "redirect:/orders"
     }
 }

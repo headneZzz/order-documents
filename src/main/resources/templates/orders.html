@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<!-- Thymeleaf Namespace -->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head}"></head>
+
+<body>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+<div class="container">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <br/>
+    <div th:if="${infoMessage}"
+         th:utext="${infoMessage}"
+         class="alert alert-primary" role="alert">
+        ...
+    </div>
+    <div th:if="${warningMessage}"
+         th:utext="${warningMessage}"
+         class="alert alert-warning" role="alert">
+
+    </div>
+    <div th:if="${errorMessage}"
+         th:utext="${errorMessage}"
+         class="alert alert-danger" role="alert">
+        ...
+    </div>
+    <br/>
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <h4 th:utext="${reader.fullName}"></h4>
+            <h4>Список дел: </h4>
+        </div>
+        <div class="col-4 text-end">
+            <a href="/digitized" class="btn btn-primary btn-lg" type="button">Добавить</a>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div th:each="order : ${orders}" class="p-2 col-4">
+            <div class="card">
+                <img th:src="'/order/images/123_123_123_1.png'" class="card-img-top">
+                <div class="card-body">
+                    <a th:href="@{/order(id=${order.id})}">
+                        <h5 th:utext="${'Ф. ' + order.getFond() + ' Оп. ' + order.getOp() + ' Д. ' + order.getDocument()}"
+                            class="card-title">...</h5>
+                    </a>
+                    <a th:href="@{/order/delete(id=${order.id})}">Удалить</a>
+                </div>
+                <div class="card-footer">
+                    <small th:utext="${#temporals.format(order.getReceiptDate(),'dd.MM.yyyy')}"
+                           class="text-muted">...</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+</div>
+<div th:replace="~{fragments/scripts::scripts}"></div>
+</body>
+</html>

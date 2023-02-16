@@ -29,6 +29,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    implementation("org.webjars:bootstrap:5.2.3")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

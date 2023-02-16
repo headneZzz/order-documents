@@ -1,16 +1,23 @@
 package ru.gosarhro.order_documents.entity
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
-import jakarta.persistence.*
 
 @Entity
 @Table(name = "orders")
 class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "document_id", unique = true, nullable = false, precision = 20, scale = 0)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null
 
     @Column(name = "fond")
@@ -33,4 +40,7 @@ class Order {
     @Column(name = "receipt_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     var receiptDate: LocalDate? = null
+
+    @Column(name = "is_deleted")
+    var isDeleted: Boolean? = null
 }

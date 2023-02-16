@@ -1,6 +1,8 @@
 package ru.gosarhro.order_documents.controller
 
 import com.opencsv.CSVWriter
+import jakarta.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpSession
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,20 +12,19 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import ru.gosarhro.order_documents.entity.Order
 import ru.gosarhro.order_documents.model.DocumentsFilter
-import ru.gosarhro.order_documents.service.OrderService
+import ru.gosarhro.order_documents.service.OrdersService
 import ru.gosarhro.order_documents.util.SessionHolder
 import java.time.LocalDate
 import java.util.*
-import jakarta.servlet.http.HttpServletResponse
-import jakarta.servlet.http.HttpSession
 
 @Controller
 @RequestMapping("/unloadByPop")
-class UnloadByPopController(private val orderService: OrderService) {
+class UnloadByPopController(private val ordersService: OrdersService) {
     private var docsByPop: Map<String, Int>? = null
+
     @GetMapping
     fun unloadFromDb(model: Model): String {
-        val documentsFromDb = orderService.getAll()
+        val documentsFromDb = ordersService.getAll()
         model.addAttribute("documentsFilter", DocumentsFilter())
         return unloadSetAttributes(model, documentsFromDb)
     }
@@ -44,7 +45,7 @@ class UnloadByPopController(private val orderService: OrderService) {
         }
         filter.reader = ""
         filter.executor = ""
-        val documentsFromDb = orderService.getAllByFilter(filter)
+        val documentsFromDb = ordersService.getAllByFilter(filter)
         return unloadSetAttributes(model, documentsFromDb)
     }
 
@@ -63,7 +64,6 @@ class UnloadByPopController(private val orderService: OrderService) {
     }
 
     @GetMapping("/exportCSV")
-    @Throws(Exception::class)
     fun exportCsv(response: HttpServletResponse) {
         val filename = "documentsByPop.csv"
         response.contentType = "text/csv; charset=cp1251"

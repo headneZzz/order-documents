@@ -4,9 +4,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import ru.gosarhro.order_documents.entity.Journal
-import ru.gosarhro.order_documents.repository.JournalRepository
 import ru.gosarhro.order_documents.model.DocumentsFilter
-import ru.gosarhro.order_documents.repository.DigitizationRepository
+import ru.gosarhro.order_documents.repository.DigitizedRepository
+import ru.gosarhro.order_documents.repository.JournalRepository
 import java.io.File
 import java.util.*
 import kotlin.math.roundToInt
@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
 @Service
 class JournalService (
     private val journalRepository: JournalRepository,
-    private val digitizationRepository: DigitizationRepository
+    private val digitizedRepository: DigitizedRepository
 ){
 
     private val log: Logger = LoggerFactory.getLogger(JournalService::class.java)
@@ -30,7 +30,7 @@ class JournalService (
     fun refresh() {
         val uniqueDocsFromFondsDb: MutableList<String> = ArrayList()
         val journals = journalRepository.findAll()
-        val digitizationDocs = digitizationRepository.findAll()
+        val digitizationDocs = digitizedRepository.findAll()
         val docsFromJournalDb: List<String> = journals.map { it.fod!! }.toList()
         digitizationDocs.forEach { digitizationDoc ->
             val names = digitizationDoc.fileName?.split("_".toRegex())?.dropLastWhile { it.isEmpty() }!!.toTypedArray()

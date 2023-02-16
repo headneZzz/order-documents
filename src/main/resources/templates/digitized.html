@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<!-- Thymeleaf Namespace -->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<div class="container">
+    <div th:replace="fragments/header :: header"></div>
+    <br/>
+
+    <!-- Не дает отправлять POST запрос при обновлении страницы -->
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <a href="/orders" class="btn btn-secondary" type="button">Назад</a>
+        </div>
+        <div class="col-4 text-end">
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
+                <button class="btn btn-primary" type="submit">Поиск</button>
+            </form>
+        </div>
+    </div>
+    <br/>
+
+    <div class="row">
+        <div th:each="digitized : ${digitizedPage.content}" class="p-2 col-4">
+            <div class="card">
+                <img th:src="'/order/images/123_123_123_1.png'" class="card-img-top">
+                <div class="card-body">
+                    <h5 th:utext="${digitized.fileName}"
+                        class="card-title">...</h5>
+                    <a th:href="@{/order/new(id=${digitized.id})}">Добавить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav th:if="${digitizedPage.totalPages > 0}">
+        <ul class="pagination">
+            <li th:each="i: ${#numbers.sequence(0, digitizedPage.totalPages - 1)}" class="page-item">
+                <a th:href="@{/unload(size=${digitizedPage.size}, page=${i})}"
+                   th:text="${i + 1}"
+                   class="page-link"></a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+<div th:replace="fragments/scripts::scripts"></div>
+</body>
+</html>

@@ -12,7 +12,7 @@ import java.time.LocalDate
 
 @Entity
 @Table(name = "Оцифровка")
-class Digitization {
+class Digitized {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

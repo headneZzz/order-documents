@@ -2,37 +2,56 @@ package ru.gosarhro.order_documents.service
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.io.Resource
+import org.springframework.core.io.UrlResource
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import ru.gosarhro.order_documents.config.AppConfig
+import ru.gosarhro.order_documents.entity.Digitized
 import ru.gosarhro.order_documents.entity.Order
+import ru.gosarhro.order_documents.entity.Reader
 import ru.gosarhro.order_documents.model.DocumentModel
-import ru.gosarhro.order_documents.repository.OrderRepository
 import ru.gosarhro.order_documents.model.DocumentsFilter
+import ru.gosarhro.order_documents.repository.DigitizedRepository
 import ru.gosarhro.order_documents.repository.FolderRepository
+import ru.gosarhro.order_documents.repository.OrderRepository
 import ru.gosarhro.order_documents.util.SessionHolder
 import java.io.File
 import java.io.File.separator
-import java.lang.Exception
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.time.LocalDate
 import java.util.*
 
 @Service
-class OrderService(
+class OrdersService(
     private val orderRepository: OrderRepository,
-    private val folderRepository: FolderRepository
+    private val folderRepository: FolderRepository,
+    private val digitizedRepository: DigitizedRepository,
+    private val appConfig: AppConfig
 ) {
-    private val log: Logger = LoggerFactory.getLogger(OrderService::class.java)
+    private val log: Logger = LoggerFactory.getLogger(OrdersService::class.java)
 
-    @Value("\${app.config.reading-room-path}")
-    lateinit var readingRoom: String
-
-    @Value("\${app.config.main-digit-folder-path}")
-    lateinit var mainDigitFolderPath: String
+    fun getById(id: Long): Order {
+        return orderRepository.findByIdOrNull(id)!!
+    }
 
     fun getAll(): List<Order> {
         return orderRepository.findAll()
+    }
+
+    fun getDocumentFiles(fod: String): List<Digitized> {
+        return digitizedRepository.findAllByFileNameStartsWith(fod)
+    }
+
+    fun getImage(fileName: String): Resource {
+        val digitization = digitizedRepository.findFirstByFileName(fileName)
+        val file = File(digitization.ref!!)
+        return UrlResource(file.toURI())
+    }
+
+    fun getReadersOrders(reader: Reader): List<Order> {
+        return orderRepository.findAllByReaderAndIsDeletedIsFalse(reader)
     }
 
     fun getAllByFilter(df: DocumentsFilter): List<Order> {
@@ -44,6 +63,28 @@ class OrderService(
             reader,
             executor
         )
+    }
+
+    fun deleteOrder(id: Long) {
+        val order = orderRepository.findByIdOrNull(id)
+        order!!.isDeleted = true
+        orderRepository.save(order)
+    }
+
+    // TODO
+    fun newOrder(digitizedId: Long, sessionId: String) {
+        val digitized = digitizedRepository.findById(digitizedId)
+        val order = Order()
+        with(order) {
+            fond = "123"
+            op = "123"
+            document = "123"
+            reader = SessionHolder.sessions[sessionId]!!.reader
+            executor = SessionHolder.sessions[sessionId]!!.executor
+            receiptDate = LocalDate.now()
+            isDeleted = false
+        }
+        orderRepository.save(order)
     }
 
     fun getFirstInvalidDoc(documents: List<String>): String? {
@@ -64,7 +105,7 @@ class OrderService(
             val document = doc.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             //Ищем дело в главной папке
             val documentsDir =
-                File(mainDigitFolderPath + separator + document[0] + separator + document[1] + separator + document[2])
+                File(appConfig.mainDigitFolderPath + separator + document[0] + separator + document[1] + separator + document[2])
             if (documentsDir.exists()) {
                 SessionHolder.sessions[sessionId]!!.documentModels.add(
                     DocumentModel(
@@ -108,12 +149,12 @@ class OrderService(
         return documentsNotFound
     }
 
-    fun sendDoc(sessionId: String) {
+    fun sendDocsToReadingRoom(sessionId: String) {
         for (doc in SessionHolder.sessions[sessionId]!!.documentFiles) {
             try {
                 val cutName = doc.name.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val out = File(
-                    readingRoom + separator + SessionHolder.sessions[sessionId]!!.reader.fullName
+                    appConfig.readingRoomPath + separator + SessionHolder.sessions[sessionId]!!.reader.fullName
                             + separator + cutName[0] + "_" + cutName[1] + "_" + cutName[2]
                 )
                 out.mkdirs()
