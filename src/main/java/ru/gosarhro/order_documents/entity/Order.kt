@@ -43,4 +43,7 @@ class Order {
 
     @Column(name = "is_deleted")
     var isDeleted: Boolean? = null
+
+    @Column(name = "theme")
+    var theme: String? = null
 }

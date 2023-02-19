@@ -1,4 +1,4 @@
-package ru.gosarhro.order_documents.controller.dto
+package ru.gosarhro.order_documents.unload.dto
 
 data class OrderDto(
     var id: Long,

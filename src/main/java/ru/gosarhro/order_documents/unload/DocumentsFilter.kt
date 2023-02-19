@@ -1,4 +1,4 @@
-package ru.gosarhro.order_documents.model
+package ru.gosarhro.order_documents.unload
 
 data class DocumentsFilter(
     var dateFrom: String = "",

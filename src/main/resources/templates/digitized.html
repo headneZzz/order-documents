@@ -29,28 +29,27 @@
     <br/>
 
     <div class="row">
-        <div th:each="digitized : ${digitizedPage.content}" class="p-2 col-4">
+        <div th:each="fod : ${fodsPage.content}" class="p-2 col-4">
             <div class="card">
                 <img th:src="'/order/images/123_123_123_1.png'" class="card-img-top">
                 <div class="card-body">
-                    <h5 th:utext="${digitized.fileName}"
+                    <h5 th:utext="${fod}"
                         class="card-title">...</h5>
-                    <a th:href="@{/order/new(id=${digitized.id})}">Добавить</a>
+                    <a th:href="@{/order/new(fod=${fod})}">Добавить</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <nav th:if="${digitizedPage.totalPages > 0}">
-        <ul class="pagination">
-            <li th:each="i: ${#numbers.sequence(0, digitizedPage.totalPages - 1)}" class="page-item">
-                <a th:href="@{/unload(size=${digitizedPage.size}, page=${i})}"
+    <nav th:if="${fodsPage.totalPages > 0}">
+        <ul class="pagination flex-wrap">
+            <li th:each="i: ${#numbers.sequence(0, fodsPage.totalPages - 1)}" class="page-item">
+                <a th:href="@{/unload(size=${fodsPage.size}, page=${i})}"
                    th:text="${i + 1}"
                    class="page-link"></a>
             </li>
         </ul>
     </nav>
-
 </div>
 <div th:replace="fragments/scripts::scripts"></div>
 </body>

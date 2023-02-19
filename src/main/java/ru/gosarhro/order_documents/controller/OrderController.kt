@@ -43,16 +43,54 @@ class OrderController(
     }
 
     @GetMapping("/order/new")
-    fun newOrder(@RequestParam id: Long, session: HttpSession): String {
+    fun newOrder(@RequestParam fod: String, session: HttpSession): String {
         if (!SessionHolder.sessions.containsKey(session.id)) {
             return "redirect:/login"
         }
-        ordersService.newOrder(id, session.id)
+        ordersService.newOrder(fod, session.id)
         return "redirect:/orders"
     }
 
-    //TODO: старый метод, все переделать
     @PostMapping("/order")
+    fun send(
+        model: Model,
+        @RequestParam("digitizedIds", required = false) digitizedIds: List<Long>,
+        session: HttpSession
+    ): String {
+        if (!SessionHolder.sessions.containsKey(session.id)) {
+            return "redirect:/login"
+        }
+        if (digitizedIds.size == 0) {
+            model.addAttribute("errorMessage", "Не выбраны файлы")
+            return "order"
+        }
+        ordersService.setFilesToSession(digitizedIds, session.id)
+        return "redirect:/load"
+    }
+
+    @GetMapping("/load")
+    fun loadScreen(): String = "load"
+
+    @GetMapping("/send")
+    fun saveAndLoadDocumentsList(session: HttpSession): String {
+        try {
+            ordersService.sendDocsToReadingRoom(session.id)
+        } catch (e: Exception) {
+            session.setAttribute("errorMessage", "Ошибка при отправке файлов. Обратитесь к сотруднику.")
+            return "redirect:/orders"
+        }
+        session.setAttribute("successMessage", "Файлы успешно отправлены. Обратитесь к сотруднику для их получения.")
+        return "redirect:/orders"
+    }
+
+    @GetMapping("/order/images/{filename:.+}")
+    fun getImage(@PathVariable filename: String): ResponseEntity<Resource> {
+        val file = ordersService.getImage(filename)
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"").body(file)
+    }
+
+    @Deprecated("")
     fun saveDocument(model: Model, @ModelAttribute("orderForm") orderForm: OrderForm, session: HttpSession): String {
         model.addAttribute("reader", SessionHolder.sessions[session.id]!!.reader)
         val orderedDocuments = orderForm.documents.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toList()
@@ -69,19 +107,4 @@ class OrderController(
         return "redirect:/load"
     }
 
-    @GetMapping("/load")
-    fun loadScreen(): String = "load"
-
-    @GetMapping("/send")
-    fun saveAndLoadDocumentsList(session: HttpSession): String {
-        ordersService.sendDocsToReadingRoom(session.id)
-        return "redirect:/login"
-    }
-
-    @GetMapping("/order/images/{filename:.+}")
-    fun getImage(@PathVariable filename: String): ResponseEntity<Resource> {
-        val file = ordersService.getImage(filename)
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"").body(file)
-    }
 }

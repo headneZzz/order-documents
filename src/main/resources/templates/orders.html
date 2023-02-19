@@ -18,6 +18,11 @@
          class="alert alert-primary" role="alert">
         ...
     </div>
+    <div th:if="${successMessage}"
+         th:utext="${successMessage}"
+         class="alert alert-success" role="alert">
+        ...
+    </div>
     <div th:if="${warningMessage}"
          th:utext="${warningMessage}"
          class="alert alert-warning" role="alert">
@@ -35,7 +40,8 @@
             <h4>Список дел: </h4>
         </div>
         <div class="col-4 text-end">
-            <a href="/digitized" class="btn btn-primary btn-lg" type="button">Добавить</a>
+            <a href="/digitized" th:class="'btn btn-primary btn-lg ' + ${warningMessage != null ? 'disabled' : ''}"
+               type="button">Добавить</a>
         </div>
     </div>
     <br/>

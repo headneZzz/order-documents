@@ -13,13 +13,14 @@ class DigitizedController(
     private val digitizedService: DigitizedService
 ) {
 
+    // TODO: Сделать поиск и проверить добавление
     @GetMapping("/digitized")
     fun getDigitized(model: Model, pageable: Pageable, session: HttpSession): String {
         if (!SessionHolder.sessions.containsKey(session.id)) {
             return "redirect:/login"
         }
-        val digitizedPage = digitizedService.getDigitized(pageable)
-        model.addAttribute("digitizedPage", digitizedPage)
+        val fodsPage = digitizedService.getDigitized(pageable)
+        model.addAttribute("fodsPage", fodsPage)
         return "digitized"
     }
 }

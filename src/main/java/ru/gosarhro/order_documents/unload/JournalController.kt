@@ -1,7 +1,8 @@
-package ru.gosarhro.order_documents.controller
+package ru.gosarhro.order_documents.unload
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.opencsv.CSVWriter
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -9,11 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import ru.gosarhro.order_documents.entity.Journal
-import ru.gosarhro.order_documents.service.JournalService
-import ru.gosarhro.order_documents.model.DocumentsFilter
 import java.util.stream.Collectors
-import jakarta.servlet.http.HttpServletResponse
 
 @Controller
 @RequestMapping("/unloadJournal")
@@ -31,7 +28,7 @@ class JournalController (
 
     @PostMapping
     fun unloadFromDbWithFilter(model: Model, @ModelAttribute("documentsFilter") documentsFilter: DocumentsFilter): String {
-        val digitDocsFromDb = journalService.getDigitDocsFromDbWithFilter(documentsFilter!!)
+        val digitDocsFromDb = journalService.getDigitDocsFromDbWithFilter(documentsFilter)
         model.addAttribute("digitDocsFromDb", digitDocsFromDb)
         return "unloadJournal"
     }

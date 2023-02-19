@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "digitization.Исполнители")
+@Table(name = "Т_Исполнители")
 class Executor {
 
     @Id

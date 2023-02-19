@@ -11,10 +11,10 @@ import ru.gosarhro.order_documents.entity.Digitized
 import ru.gosarhro.order_documents.entity.Order
 import ru.gosarhro.order_documents.entity.Reader
 import ru.gosarhro.order_documents.model.DocumentModel
-import ru.gosarhro.order_documents.model.DocumentsFilter
 import ru.gosarhro.order_documents.repository.DigitizedRepository
-import ru.gosarhro.order_documents.repository.FolderRepository
 import ru.gosarhro.order_documents.repository.OrderRepository
+import ru.gosarhro.order_documents.unload.DocumentsFilter
+import ru.gosarhro.order_documents.unload.FolderRepository
 import ru.gosarhro.order_documents.util.SessionHolder
 import java.io.File
 import java.io.File.separator
@@ -46,7 +46,7 @@ class OrdersService(
 
     fun getImage(fileName: String): Resource {
         val digitization = digitizedRepository.findFirstByFileName(fileName)
-        val file = File(digitization.ref!!)
+        val file = File(digitization.ref!!.trim { it <= '#' })
         return UrlResource(file.toURI())
     }
 
@@ -71,22 +71,29 @@ class OrdersService(
         orderRepository.save(order)
     }
 
-    // TODO
-    fun newOrder(digitizedId: Long, sessionId: String) {
-        val digitized = digitizedRepository.findById(digitizedId)
+    fun setFilesToSession(digitizedIds: List<Long>, sessionId: String) {
+        val digitizedList = digitizedRepository.findAllById(digitizedIds)
+        val files = digitizedList.map { File(it.ref!!.trim { it <= '#' }) }.toList()
+        SessionHolder.sessions[sessionId]!!.documentFiles.addAll(files)
+    }
+
+    fun newOrder(fod: String, sessionId: String) {
+        val fodSplited = fod.split(" ")
         val order = Order()
         with(order) {
-            fond = "123"
-            op = "123"
-            document = "123"
+            fond = fodSplited[0]
+            op = fodSplited[1]
+            document = fodSplited[2]
             reader = SessionHolder.sessions[sessionId]!!.reader
             executor = SessionHolder.sessions[sessionId]!!.executor
             receiptDate = LocalDate.now()
             isDeleted = false
+            theme = SessionHolder.sessions[sessionId]!!.theme
         }
         orderRepository.save(order)
     }
 
+    @Deprecated("")
     fun getFirstInvalidDoc(documents: List<String>): String? {
         for (doc in documents) {
             val document = doc.trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -97,6 +104,7 @@ class OrdersService(
         return null
     }
 
+    @Deprecated("")
     fun findDocs(documents: List<String>, sessionId: String): List<String> {
         val documentsNotFound: MutableList<String> = ArrayList()
         val folders: List<File> = folderRepository.findAll().map { File(it.path) }.toList()
@@ -150,45 +158,28 @@ class OrdersService(
     }
 
     fun sendDocsToReadingRoom(sessionId: String) {
-        for (doc in SessionHolder.sessions[sessionId]!!.documentFiles) {
+        for (file in SessionHolder.sessions[sessionId]!!.documentFiles) {
             try {
-                val cutName = doc.name.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val cutName = file.name.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val out = File(
                     appConfig.readingRoomPath + separator + SessionHolder.sessions[sessionId]!!.reader.fullName
                             + separator + cutName[0] + "_" + cutName[1] + "_" + cutName[2]
                 )
                 out.mkdirs()
                 Files.copy(
-                    doc.toPath(),
-                    File(out.toString() + separator + doc.name).toPath(),
+                    file.toPath(),
+                    File(out.toString() + separator + file.name).toPath(),
                     StandardCopyOption.REPLACE_EXISTING
                 )
             } catch (e: Exception) {
-                log.error("THIS FILE NAME: " + doc.name)
-                log.error(SessionHolder.sessions[sessionId]!!.documentModels.toString())
-                log.error("SIZE: " + SessionHolder.sessions[sessionId]!!.documentFiles.size)
+                log.error("Error with filename: $file.name")
                 log.error(e.message)
-                return
+                throw Exception(e.message)
             }
         }
-
-        saveOrder(sessionId)
-        SessionHolder.clearSession(sessionId)
     }
 
-    private fun saveOrder(sessionId: String) {
-        for ((fond, op, doc) in SessionHolder.sessions[sessionId]!!.documentModels) {
-            val order = Order()
-            order.fond = fond
-            order.op = op
-            order.document = doc
-            order.reader = SessionHolder.sessions[sessionId]!!.reader
-            order.executor = SessionHolder.sessions[sessionId]!!.executor
-            order.receiptDate = LocalDate.now()
-            orderRepository.save(order)
-        }
-    }
-
+    @Deprecated("")
     private fun searchFiles(directory: File, matchingFiles: MutableList<File>, document: Array<String>) {
         for (file in Objects.requireNonNull(directory.listFiles())) {
             if (file.isFile) {

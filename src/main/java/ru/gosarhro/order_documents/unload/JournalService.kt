@@ -1,12 +1,9 @@
-package ru.gosarhro.order_documents.service
+package ru.gosarhro.order_documents.unload
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import ru.gosarhro.order_documents.entity.Journal
-import ru.gosarhro.order_documents.model.DocumentsFilter
 import ru.gosarhro.order_documents.repository.DigitizedRepository
-import ru.gosarhro.order_documents.repository.JournalRepository
 import java.io.File
 import java.util.*
 import kotlin.math.roundToInt

@@ -36,7 +36,8 @@ class LoginController(private val loginService: LoginService) {
     fun login(model: Model, @ModelAttribute("loginForm") loginForm: LoginForm, session: HttpSession): String {
         val readerFullName = loginForm.readerFullName.trim { it <= ' ' }
         val executor = loginForm.executor
-        if (readerFullName.isEmpty() || executor == Executor()) {
+        val theme = loginForm.theme
+        if (readerFullName.isEmpty() || executor == Executor() || theme.isEmpty()) {
             model.addAttribute("errorMessage", "Все поля должны быть заполнены")
             return "login"
         }
@@ -45,7 +46,7 @@ class LoginController(private val loginService: LoginService) {
             return "login"
         }
         val reader = loginService.getReader(readerFullName)
-        SessionHolder.sessions[session.id] = SessionModel(reader, executor)
+        SessionHolder.sessions[session.id] = SessionModel(reader, executor, theme)
         return "redirect:/orders"
     }
 }

@@ -20,6 +20,20 @@ class OrdersController(
         if (!SessionHolder.sessions.containsKey(session.id)) {
             return "redirect:/login"
         }
+        if (session.getAttribute("errorMessage") != null) {
+            model.addAttribute(
+                "errorMessage",
+                session.getAttribute("errorMessage")
+            )
+            session.removeAttribute("errorMessage")
+        }
+        if (session.getAttribute("successMessage") != null) {
+            model.addAttribute(
+                "successMessage",
+                session.getAttribute("successMessage")
+            )
+            session.removeAttribute("successMessage")
+        }
         val reader = SessionHolder.sessions[session.id]!!.reader
         val orders = ordersService.getReadersOrders(reader)
         if (appConfig.maxOrderSize != 0 && orders.size >= appConfig.maxOrderSize) {
@@ -34,7 +48,7 @@ class OrdersController(
                 "У вас пока нет дел в списке. Вы можете посмотреть и добавить дела для рассмотрения через кнопку Добавить."
             )
         }
-        model.addAttribute("reader", SessionHolder.sessions[session.id]!!.reader)
+        model.addAttribute("reader", reader)
         model.addAttribute("orders", orders)
 
         return "orders"

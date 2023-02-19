@@ -17,29 +17,42 @@
         Выберите нужные файлы и нажмите "Отправить". После этого они появятся на компьютере у сотрудника. Обратитесь к
         нему для получения файлов.
     </div>
-    <br/>
-    <div class="row justify-content-between">
-        <div class="col-4">
-            <h3 th:utext="${documentFullNumber}"></h3>
-        </div>
-        <div class="col-4 text-end">
-            <a href="/send" class="btn btn-primary btn-lg" type="button">Отправить</a>
-        </div>
+    <div th:if="${infoMessage}"
+         th:utext="${infoMessage}"
+         class="alert alert-primary" role="alert">
+        ...
+    </div>
+    <div th:if="${errorMessage}"
+         th:utext="${errorMessage}"
+         class="alert alert-danger" role="alert">
+        ...
     </div>
     <br/>
-
-    <div class="lightbox">
-        <div class="row">
-            <div class="col-sm-4" th:each="digitized : ${digitizedList}">
-                <div class="p-3 form-check">
-                    <input class="form-check-input" type="checkbox" th:value="${digitized.id}" th:id="${digitized.id}">
-                    <label class="form-check-label" th:for="${digitized.id}">
-                        <img th:src="'/order/images/' + ${digitized.fileName}" class="img-fluid">
-                    </label>
+    <form th:action="@{/order}"
+          method="POST">
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <h3 th:utext="${documentFullNumber}"></h3>
+            </div>
+            <div class="col-4 text-end">
+                <input type="submit" class="btn btn-primary btn-lg" value="Отправить"/>
+            </div>
+        </div>
+        <br/>
+        <div class="lightbox">
+            <div class="row">
+                <div class="col-sm-4" th:each="digitized : ${digitizedList}">
+                    <div class="p-3 form-check">
+                        <input class="form-check-input" type="checkbox" name="digitizedIds" th:value="${digitized.id}"
+                               th:id="${digitized.id}">
+                        <label class="form-check-label" th:for="${digitized.id}">
+                            <img th:src="'/order/images/' + ${digitized.fileName}" class="img-fluid">
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
     <br/>
 </div>
 
