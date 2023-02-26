@@ -13,7 +13,7 @@ interface OrderRepository : JpaRepository<Order, Long> {
     @Query(
         "SELECT c FROM Order c " +
                 "WHERE c.receiptDate between :dateFrom and :dateTo " +
-                "and (:reader is null or c.reader.fullName like :reader) " +
+                "and (:reader is null or c.reader.fullName like %:reader%) " +
                 "and (:executor is null" + " or c.executor.name = :executor)"
     )
     fun findAll(
@@ -27,7 +27,7 @@ interface OrderRepository : JpaRepository<Order, Long> {
     @Query(
         "SELECT c FROM Order c " +
                 "WHERE c.receiptDate between :dateFrom and :dateTo " +
-                "and (:reader is null or c.reader.fullName like :reader) " +
+                "and (:reader is null or c.reader.fullName like %:reader%) " +
                 "and (:executor is null" + " or c.executor.name = :executor)"
     )
     fun findAll(dateFrom: LocalDate?, dateTo: LocalDate?, reader: String?, executor: String?): List<Order>

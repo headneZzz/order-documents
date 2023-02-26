@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import ru.gosarhro.order_documents.entity.Order
 import ru.gosarhro.order_documents.service.OrdersService
-import ru.gosarhro.order_documents.util.SessionHolder
+import ru.gosarhro.order_documents.session.SessionHolder
 import java.time.LocalDate
 import java.util.*
 

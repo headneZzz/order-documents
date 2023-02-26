@@ -6,7 +6,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import ru.gosarhro.order_documents.config.AppConfig
 import ru.gosarhro.order_documents.service.OrdersService
-import ru.gosarhro.order_documents.util.SessionHolder
+import ru.gosarhro.order_documents.session.SessionHolder
 import java.util.*
 
 @Controller

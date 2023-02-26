@@ -1,4 +1,4 @@
-package ru.gosarhro.order_documents.util
+package ru.gosarhro.order_documents.session
 
 import ru.gosarhro.order_documents.model.SessionModel
 import ru.gosarhro.order_documents.unload.DocumentsFilter

@@ -11,7 +11,7 @@ import ru.gosarhro.order_documents.entity.Executor
 import ru.gosarhro.order_documents.model.LoginForm
 import ru.gosarhro.order_documents.model.SessionModel
 import ru.gosarhro.order_documents.service.LoginService
-import ru.gosarhro.order_documents.util.SessionHolder
+import ru.gosarhro.order_documents.session.SessionHolder
 
 @Controller
 @RequestMapping("/", "index", "login")

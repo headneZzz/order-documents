@@ -48,13 +48,24 @@
     <div class="row">
         <div th:each="order : ${orders}" class="p-2 col-4">
             <div class="card">
-                <img th:src="'/order/images/123_123_123_1.png'" class="card-img-top">
+                <img th:src="'/order/images/' + ${order.getFond()} + ' ' + ${order.getOp()} + ' ' + ${order.getDocument()}"
+                     class="card-img-top">
                 <div class="card-body">
-                    <a th:href="@{/order(id=${order.id})}">
-                        <h5 th:utext="${'Ф. ' + order.getFond() + ' Оп. ' + order.getOp() + ' Д. ' + order.getDocument()}"
-                            class="card-title">...</h5>
-                    </a>
-                    <a th:href="@{/order/delete(id=${order.id})}">Удалить</a>
+                    <h5 th:utext="${order.getFond() + ' ' + order.getOp() + ' ' + order.getDocument()}"
+                        class="card-title">...</h5>
+                    <div class="row justify-content-between pt-3">
+                        <div class="col">
+                            <a type="button" class="btn btn-primary me-2" th:href="@{/order(id=${order.id})}">
+                                Посмотреть
+                            </a>
+                        </div>
+                        <div class="col text-end">
+                            <a type="button" class="btn btn-outline-danger me-2"
+                               th:href="@{/order/delete(id=${order.id})}">
+                                Удалить
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <small th:utext="${#temporals.format(order.getReceiptDate(),'dd.MM.yyyy')}"

@@ -4,6 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
 import org.springframework.core.io.UrlResource
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.gosarhro.order_documents.config.AppConfig
@@ -13,9 +14,9 @@ import ru.gosarhro.order_documents.entity.Reader
 import ru.gosarhro.order_documents.model.DocumentModel
 import ru.gosarhro.order_documents.repository.DigitizedRepository
 import ru.gosarhro.order_documents.repository.OrderRepository
+import ru.gosarhro.order_documents.session.SessionHolder
 import ru.gosarhro.order_documents.unload.DocumentsFilter
 import ru.gosarhro.order_documents.unload.FolderRepository
-import ru.gosarhro.order_documents.util.SessionHolder
 import java.io.File
 import java.io.File.separator
 import java.nio.file.Files
@@ -44,9 +45,13 @@ class OrdersService(
         return digitizedRepository.findAllByFileNameStartsWith(fod)
     }
 
-    fun getImage(fileName: String): Resource {
-        val digitization = digitizedRepository.findFirstByFileName(fileName)
-        val file = File(digitization.ref!!.trim { it <= '#' })
+    fun getImage(fileName: String): Resource? {
+        val newFileName = fileName.replace(" ", "_")
+        val digitization = digitizedRepository.findFirstByFileNameIsLike(newFileName, PageRequest.of(0, 1))
+        if (digitization.isEmpty()) {
+            return null
+        }
+        val file = File(digitization[0].ref!!.trim { it <= '#' })
         return UrlResource(file.toURI())
     }
 

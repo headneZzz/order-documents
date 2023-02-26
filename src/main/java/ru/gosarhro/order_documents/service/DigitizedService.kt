@@ -9,7 +9,7 @@ import ru.gosarhro.order_documents.repository.DigitizedRepository
 class DigitizedService(
     private val digitizedRepository: DigitizedRepository
 ) {
-    fun getDigitized(pageable: Pageable): Page<String> {
-        return digitizedRepository.findAllFods(pageable)
+    fun getDigitized(fod: String?, pageable: Pageable): Page<String> {
+        return digitizedRepository.findAllFods(fod, pageable)
     }
 }

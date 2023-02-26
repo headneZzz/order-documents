@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import ru.gosarhro.order_documents.model.OrderForm
 import ru.gosarhro.order_documents.service.OrdersService
-import ru.gosarhro.order_documents.util.SessionHolder
+import ru.gosarhro.order_documents.session.SessionHolder
 
 @Controller
 class OrderController(
@@ -85,7 +85,7 @@ class OrderController(
 
     @GetMapping("/order/images/{filename:.+}")
     fun getImage(@PathVariable filename: String): ResponseEntity<Resource> {
-        val file = ordersService.getImage(filename)
+        val file = ordersService.getImage(filename) ?: return ResponseEntity.badRequest().build()
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"").body(file)
     }

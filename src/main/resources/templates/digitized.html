@@ -20,8 +20,11 @@
             <a href="/orders" class="btn btn-secondary" type="button">Назад</a>
         </div>
         <div class="col-4 text-end">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
+            <form th:action="@{/digitized}"
+                  class="d-flex"
+                  role="search">
+                <input th:name="fod" th:value="${fod}" class="form-control me-2" type="search" placeholder="Поиск"
+                       aria-label="Search">
                 <button class="btn btn-primary" type="submit">Поиск</button>
             </form>
         </div>
@@ -29,13 +32,13 @@
     <br/>
 
     <div class="row">
-        <div th:each="fod : ${fodsPage.content}" class="p-2 col-4">
+        <div th:each="fods : ${fodsPage.content}" class="p-2 col-4">
             <div class="card">
-                <img th:src="'/order/images/123_123_123_1.png'" class="card-img-top">
+                <img th:src="'/order/images/' + ${fods}" class="card-img-top">
                 <div class="card-body">
-                    <h5 th:utext="${fod}"
+                    <h5 th:utext="${fods}"
                         class="card-title">...</h5>
-                    <a th:href="@{/order/new(fod=${fod})}">Добавить</a>
+                    <a type="button" class="btn btn-primary me-2" th:href="@{/order/new(fod=${fods})}">Добавить</a>
                 </div>
             </div>
         </div>
@@ -43,10 +46,18 @@
 
     <nav th:if="${fodsPage.totalPages > 0}">
         <ul class="pagination flex-wrap">
-            <li th:each="i: ${#numbers.sequence(0, fodsPage.totalPages - 1)}" class="page-item">
-                <a th:href="@{/unload(size=${fodsPage.size}, page=${i})}"
-                   th:text="${i + 1}"
+            <li th:class="'page-item '+${fodsPage.hasPrevious() ? '' : 'disabled'}">
+                <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber() - 1})}"
+                   class="page-link">&larr;</a>
+            </li>
+            <li class="page-item">
+                <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber()})}"
+                   th:text="${fodsPage.getNumber() + 1}"
                    class="page-link"></a>
+            </li>
+            <li th:class="'page-item '+${fodsPage.hasNext() ? '' : 'disabled'}">
+                <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber() + 1})}"
+                   class="page-link">&rarr;</a>
             </li>
         </ul>
     </nav>
