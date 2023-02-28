@@ -7,11 +7,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
-import ru.gosarhro.order_documents.model.OrderForm
 import ru.gosarhro.order_documents.service.OrdersService
 import ru.gosarhro.order_documents.session.SessionHolder
 
@@ -88,23 +86,6 @@ class OrderController(
         val file = ordersService.getImage(filename) ?: return ResponseEntity.badRequest().build()
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"").body(file)
-    }
-
-    @Deprecated("")
-    fun saveDocument(model: Model, @ModelAttribute("orderForm") orderForm: OrderForm, session: HttpSession): String {
-        model.addAttribute("reader", SessionHolder.sessions[session.id]!!.reader)
-        val orderedDocuments = orderForm.documents.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toList()
-        val invalidDoc = ordersService.getFirstInvalidDoc(orderedDocuments)
-        if (invalidDoc != null) {
-            model.addAttribute("errorMessage", "Неправильно расставлены пробелы в $invalidDoc")
-            return "orders"
-        }
-        val documentsNotFound = ordersService.findDocs(orderedDocuments, session.id)
-        if (documentsNotFound.isNotEmpty()) {
-            model.addAttribute("errorMessage", "$documentsNotFound нет в базе.")
-            return "orders"
-        }
-        return "redirect:/load"
     }
 
 }
