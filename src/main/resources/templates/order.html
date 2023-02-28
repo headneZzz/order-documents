@@ -9,6 +9,20 @@
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
+
+    function checkAll() {
+        const checkboxes = document.getElementsByName('digitizedIds');
+        for (let i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = true;
+        }
+    }
+
+    function uncheckAll() {
+        const checkboxes = document.getElementsByName('digitizedIds');
+        for (let i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = false;
+        }
+    }
 </script>
 <div class="container">
     <div th:replace="~{fragments/header :: header}"></div>
@@ -30,12 +44,17 @@
     <br/>
     <form th:action="@{/order}"
           method="POST">
+        <div class="row">
+            <h3 th:utext="${documentFullNumber}"></h3>
+        </div>
         <div class="row justify-content-between">
             <div class="col-4">
-                <h3 th:utext="${documentFullNumber}"></h3>
+                <a href="/orders" class="btn btn-secondary" type="button">Назад</a>
             </div>
             <div class="col-4 text-end">
-                <input type="submit" class="btn btn-primary btn-lg" value="Отправить"/>
+                <input type="button" class="btn btn-outline-primary" onClick="uncheckAll()" value="Убрать все"/>
+                <input type="button" class="btn btn-outline-primary" onClick="checkAll()" value="Выбрать все"/>
+                <input type="submit" class="btn btn-primary" value="Отправить"/>
             </div>
         </div>
         <br/>
@@ -46,7 +65,7 @@
                         <input class="form-check-input" type="checkbox" name="digitizedIds" th:value="${digitized.id}"
                                th:id="${digitized.id}">
                         <label class="form-check-label" th:for="${digitized.id}">
-                            <img th:src="'/order/images/' + ${digitized.fileName}" class="img-fluid">
+                            <img th:src="'/images/' + ${digitized.fileName}" class="img-fluid">
                         </label>
                     </div>
                 </div>

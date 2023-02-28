@@ -24,6 +24,4 @@ server:
 app:
   config:
     max-order-size: 20
-    main-digit-folder-path: D:\ГосАрхив\Тест\Оцифровка
     reading-room-path: D:\ГосАрхив\Тест\Читальный зал
-    reader-folders-path: D:\ГосАрхив\Тест

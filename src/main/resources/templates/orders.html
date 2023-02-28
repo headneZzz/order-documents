@@ -48,8 +48,8 @@
     <div class="row">
         <div th:each="order : ${orders}" class="p-2 col-4">
             <div class="card">
-                <img th:src="'/order/images/' + ${order.getFond()} + ' ' + ${order.getOp()} + ' ' + ${order.getDocument()}"
-                     class="card-img-top">
+                <img th:src="'/images/preview?fod=' + ${order.getFond()} + ' ' + ${order.getOp()} + ' ' + ${order.getDocument()}"
+                     class="card-img-top img-fluid">
                 <div class="card-body">
                     <h5 th:utext="${order.getFond() + ' ' + order.getOp() + ' ' + order.getDocument()}"
                         class="card-title">...</h5>

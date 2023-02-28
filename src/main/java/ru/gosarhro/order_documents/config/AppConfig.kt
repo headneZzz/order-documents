@@ -5,7 +5,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "app.config")
 data class AppConfig(
     val maxOrderSize: Int,
-    val readingRoomPath: String,
-    val mainDigitFolderPath: String,
-    val readerFoldersPath: String
+    val readingRoomPath: String
 )

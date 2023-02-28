@@ -15,7 +15,7 @@ class LoginService(
     private val appConfig: AppConfig
 ) {
     fun readerFolderIsNotExists(reader: String): Boolean {
-        val readerFolder = File(appConfig.readerFoldersPath + File.separator + reader)
+        val readerFolder = File(appConfig.readingRoomPath + File.separator + reader)
         return !readerFolder.exists()
     }
 

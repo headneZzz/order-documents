@@ -8,11 +8,10 @@ import ru.gosarhro.order_documents.entity.Digitized
 
 interface DigitizedRepository : JpaRepository<Digitized, Long> {
 
-    @Query("select distinct d.fod from Digitized d where :fod is null or d.fod like %:fod%")
+    @Query("select distinct d.fod from Digitized d where :fod is null or d.fod = :fod")
     fun findAllFods(fod: String?, pageable: Pageable): Page<String>
 
     fun findAllByFileNameStartsWith(fod: String): List<Digitized>
 
-    @Query("select d from Digitized d where d.fileName like %:fileName%")
-    fun findFirstByFileNameIsLike(fileName: String, pageable: Pageable): List<Digitized>
+    fun findByFileName(fileName: String): Digitized?
 }

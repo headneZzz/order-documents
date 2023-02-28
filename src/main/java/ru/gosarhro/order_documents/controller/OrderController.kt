@@ -1,13 +1,9 @@
 package ru.gosarhro.order_documents.controller
 
 import jakarta.servlet.http.HttpSession
-import org.springframework.core.io.Resource
-import org.springframework.http.HttpHeaders
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import ru.gosarhro.order_documents.service.OrdersService
@@ -80,12 +76,4 @@ class OrderController(
         session.setAttribute("successMessage", "Файлы успешно отправлены. Обратитесь к сотруднику для их получения.")
         return "redirect:/orders"
     }
-
-    @GetMapping("/order/images/{filename:.+}")
-    fun getImage(@PathVariable filename: String): ResponseEntity<Resource> {
-        val file = ordersService.getImage(filename) ?: return ResponseEntity.badRequest().build()
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"").body(file)
-    }
-
 }
