@@ -1,62 +1,47 @@
 package ru.gosarhro.order_documents.service
 
-import org.apache.poi.util.IOUtils
 import org.springframework.stereotype.Service
 import ru.gosarhro.order_documents.repository.DigitizedRepository
-import java.awt.Graphics2D
+import java.awt.AlphaComposite
+import java.awt.RenderingHints
 import java.awt.image.BufferedImage
-import java.io.ByteArrayOutputStream
 import java.io.File
-import javax.imageio.IIOImage
 import javax.imageio.ImageIO
-import javax.imageio.ImageWriteParam
 
 @Service
 class ImageService(
-    private val digitizedRepository: DigitizedRepository,
+    private val digitizedRepository: DigitizedRepository
 ) {
-    fun getImage(fileName: String): ByteArray? {
+    fun getImage(fileName: String): BufferedImage? {
         val newFileName = fileName.replace(" ", "_")
         val digitization = digitizedRepository.findByFileName(newFileName) ?: return null
-        val file = File(digitization.ref!!.trim { it <= '#' })
-        val image = ImageIO.read(file)
-        val imageWithoutAlpha = removeAlphaChannel(image)
-        return compressImage(imageWithoutAlpha)
+        val location = digitization.ref!!.trim { it <= '#' }
+        return readImage(location)
     }
 
-    fun getPreview(fod: String): ByteArray? {
+    fun getPreview(fod: String): BufferedImage? {
         val newFod = fod.replace(" ", "_")
         val digitization = digitizedRepository.findByFileName(newFod + "_000") ?: return null
-        val file = File(digitization.ref!!.trim { it <= '#' })
+        val location = digitization.ref!!.trim { it <= '#' }
+        return readImage(location)
+    }
+
+    fun readImage(location: String): BufferedImage {
+        val file = File(location)
         val image = ImageIO.read(file)
-        val imageWithoutAlpha = removeAlphaChannel(image)
-        return compressImage(imageWithoutAlpha)
-    }
+        val type = image.type
 
-    private fun compressImage(image: BufferedImage): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        val imageWriter = ImageIO.getImageWritersByFormatName("jpg").next()
-        val imageOutputStream = ImageIO.createImageOutputStream(outputStream)
-        imageWriter.output = imageOutputStream
-        val param = imageWriter.defaultWriteParam
-        param.compressionMode = ImageWriteParam.MODE_EXPLICIT
-        param.compressionQuality = 0.7f
-        imageWriter.write(null, IIOImage(image, null, null), param)
-        imageOutputStream.flush()
-        IOUtils.closeQuietly(outputStream)
-        IOUtils.closeQuietly(imageOutputStream)
-        return outputStream.toByteArray()
-    }
+        val resizedImage = BufferedImage(image.width, image.height, type)
+        val g = resizedImage.createGraphics()
 
-    private fun removeAlphaChannel(image: BufferedImage): BufferedImage {
-        if (!image.colorModel.hasAlpha()) {
-            return image
+        if (type == BufferedImage.TYPE_INT_ARGB || type == BufferedImage.TYPE_INT_ARGB_PRE) {
+            g.composite = AlphaComposite.Src
         }
-        val target = BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_RGB)
-        val g: Graphics2D = target.createGraphics()
-        g.fillRect(0, 0, image.width, image.height)
-        g.drawImage(image, 0, 0, null)
+
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
+        g.drawImage(image, 0, 0, image.width, image.height, null)
         g.dispose()
-        return target
+
+        return resizedImage
     }
 }
