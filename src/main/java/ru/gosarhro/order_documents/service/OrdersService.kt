@@ -35,7 +35,7 @@ class OrdersService(
     }
 
     fun getDocumentFiles(fod: String): List<Digitized> {
-        return digitizedRepository.findAllByFileNameStartsWith(fod + "_")
+        return digitizedRepository.findAllByFileNameStartsWithOrderByFileName(fod + "_")
     }
 
     fun getReadersOrders(reader: Reader): List<Order> {

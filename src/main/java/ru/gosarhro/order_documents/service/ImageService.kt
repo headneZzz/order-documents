@@ -1,5 +1,6 @@
 package ru.gosarhro.order_documents.service
 
+import lombok.SneakyThrows
 import org.apache.poi.util.IOUtils
 import org.springframework.stereotype.Service
 import ru.gosarhro.order_documents.repository.DigitizedRepository
@@ -10,6 +11,7 @@ import java.io.File
 import javax.imageio.IIOImage
 import javax.imageio.ImageIO
 import javax.imageio.ImageWriteParam
+import kotlin.math.roundToInt
 
 @Service
 class ImageService(
@@ -20,7 +22,7 @@ class ImageService(
         val digitization = digitizedRepository.findByFileName(newFileName) ?: return null
         val file = File(digitization.ref!!.trim { it <= '#' })
         val image = ImageIO.read(file)
-        val imageWithoutAlpha = removeAlphaChannel(image)
+        val imageWithoutAlpha = optimize(image)
         return compressImage(imageWithoutAlpha)
     }
 
@@ -29,7 +31,7 @@ class ImageService(
         val digitization = digitizedRepository.findByFileName(newFod + "_000") ?: return null
         val file = File(digitization.ref!!.trim { it <= '#' })
         val image = ImageIO.read(file)
-        val imageWithoutAlpha = removeAlphaChannel(image)
+        val imageWithoutAlpha = optimize(image)
         return compressImage(imageWithoutAlpha)
     }
 
@@ -48,15 +50,37 @@ class ImageService(
         return outputStream.toByteArray()
     }
 
-    private fun removeAlphaChannel(image: BufferedImage): BufferedImage {
-        if (!image.colorModel.hasAlpha()) {
-            return image
+    /**
+     * @return image reduced to the size specified by properties without alpha channel
+     */
+    @SneakyThrows
+    private fun optimize(originalImage: BufferedImage): BufferedImage {
+        val originalWidth = originalImage.width
+        val originalHeight = originalImage.height
+        if (originalWidth < MAX_WIDTH && originalHeight < MAX_HEIGHT && !originalImage.colorModel.hasAlpha()) {
+            return originalImage
         }
-        val target = BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_RGB)
-        val g: Graphics2D = target.createGraphics()
-        g.fillRect(0, 0, image.width, image.height)
-        g.drawImage(image, 0, 0, null)
+        var newWidth = originalWidth
+        var newHeight = originalHeight
+        if (originalWidth > MAX_WIDTH || originalHeight > MAX_HEIGHT) {
+            if (originalWidth > originalHeight) {
+                newWidth = MAX_WIDTH
+                newHeight = (originalHeight.toDouble() / originalWidth * newWidth).roundToInt()
+            } else {
+                newHeight = MAX_HEIGHT
+                newWidth = (originalWidth.toDouble() / originalHeight * newHeight).roundToInt()
+            }
+        }
+        val resizedImage = BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB)
+        val g: Graphics2D = resizedImage.createGraphics()
+        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null)
         g.dispose()
-        return target
+
+        return resizedImage
+    }
+
+    companion object {
+        const val MAX_WIDTH = 1920
+        const val MAX_HEIGHT = 1920
     }
 }

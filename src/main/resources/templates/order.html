@@ -10,6 +10,11 @@
         window.history.replaceState(null, null, window.location.href);
     }
 
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
     function checkAll() {
         const checkboxes = document.getElementsByName('digitizedIds');
         for (let i = 0, n = checkboxes.length; i < n; i++) {
@@ -25,6 +30,17 @@
     }
 </script>
 <div class="container">
+    <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            id="btn-back-to-top"
+            onclick="backToTop()"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+        </svg>
+    </button>
     <div th:replace="~{fragments/header :: header}"></div>
     <br/>
     <div class="alert alert-primary" role="alert">
@@ -66,6 +82,7 @@
                                th:id="${digitized.id}">
                         <label class="form-check-label" th:for="${digitized.id}">
                             <img th:src="'/images/' + ${digitized.fileName}" class="img-fluid">
+                            <span th:text="${digitized.fileName}"></span>
                         </label>
                     </div>
                 </div>
