@@ -1,23 +1,21 @@
 package ru.gosarhro.order_documents.controller
 
 import jakarta.servlet.http.HttpSession
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
 import ru.gosarhro.order_documents.entity.Executor
 import ru.gosarhro.order_documents.model.LoginForm
-import ru.gosarhro.order_documents.model.SessionModel
+import ru.gosarhro.order_documents.model.ReaderDetails
 import ru.gosarhro.order_documents.service.LoginService
-import ru.gosarhro.order_documents.session.SessionHolder
 
 @Controller
-@RequestMapping("/", "index", "login")
 class LoginController(private val loginService: LoginService) {
 
-    @GetMapping
+    @GetMapping("/login")
     fun login(model: Model): String {
         val loginForm = LoginForm()
         val executors = loginService.getExecutors()
@@ -28,11 +26,11 @@ class LoginController(private val loginService: LoginService) {
 
     @GetMapping("/logout")
     fun logout(model: Model, session: HttpSession): String {
-        SessionHolder.clearSession(session.id)
+        session.invalidate()
         return login(model)
     }
 
-    @PostMapping
+    @PostMapping("/login")
     fun login(model: Model, @ModelAttribute("loginForm") loginForm: LoginForm, session: HttpSession): String {
         val readerFullName = loginForm.readerFullName.trim { it <= ' ' }
         val executor = loginForm.executor
@@ -46,7 +44,10 @@ class LoginController(private val loginService: LoginService) {
             return "login"
         }
         val reader = loginService.getReader(readerFullName)
-        SessionHolder.sessions[session.id] = SessionModel(reader, executor, theme)
+
+        val user = ReaderDetails(reader, executor, theme)
+        val authentication = UsernamePasswordAuthenticationToken(user, user.authorities)
+        session.setAttribute("authentication", authentication)
         return "redirect:/orders"
     }
 }

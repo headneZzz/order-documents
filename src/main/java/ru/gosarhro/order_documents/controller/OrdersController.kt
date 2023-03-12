@@ -1,12 +1,13 @@
 package ru.gosarhro.order_documents.controller
 
 import jakarta.servlet.http.HttpSession
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import ru.gosarhro.order_documents.config.AppConfig
+import ru.gosarhro.order_documents.model.ReaderDetails
 import ru.gosarhro.order_documents.service.OrdersService
-import ru.gosarhro.order_documents.session.SessionHolder
 import java.util.*
 
 @Controller
@@ -16,10 +17,11 @@ class OrdersController(
 ) {
 
     @GetMapping("/orders")
-    fun showAddDocumentPage(model: Model, session: HttpSession): String {
-        if (!SessionHolder.sessions.containsKey(session.id)) {
-            return "redirect:/login"
-        }
+    fun showAddDocumentPage(
+        model: Model,
+        session: HttpSession,
+        @AuthenticationPrincipal readerDetails: ReaderDetails
+    ): String {
         if (session.getAttribute("errorMessage") != null) {
             model.addAttribute(
                 "errorMessage",
@@ -34,7 +36,7 @@ class OrdersController(
             )
             session.removeAttribute("successMessage")
         }
-        val reader = SessionHolder.sessions[session.id]!!.reader
+        val reader = readerDetails.reader
         val orders = ordersService.getReadersOrders(reader)
         if (appConfig.maxOrderSize != 0 && orders.size >= appConfig.maxOrderSize) {
             model.addAttribute(

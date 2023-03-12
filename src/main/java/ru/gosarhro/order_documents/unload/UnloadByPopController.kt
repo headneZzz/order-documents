@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import ru.gosarhro.order_documents.entity.Order
 import ru.gosarhro.order_documents.service.OrdersService
-import ru.gosarhro.order_documents.session.SessionHolder
 import java.time.LocalDate
 import java.util.*
 
@@ -34,9 +33,8 @@ class UnloadByPopController(private val ordersService: OrdersService) {
         @ModelAttribute("documentsFilter") documentsFilter: DocumentsFilter,
         session: HttpSession
     ): String {
-        SessionHolder.filters[session.id] = documentsFilter
-        val filter = SessionHolder.filters[session.id]
-        if (filter!!.dateFrom.isEmpty()) {
+        val filter = documentsFilter
+        if (filter.dateFrom.isEmpty()) {
             filter.dateFrom = "2019-11-01"
         }
         if (filter.dateTo.isEmpty()) {
@@ -44,6 +42,7 @@ class UnloadByPopController(private val ordersService: OrdersService) {
         }
         filter.reader = ""
         filter.executor = ""
+        session.setAttribute("documentsFilter", filter)
         val documentsFromDb = ordersService.getAllByFilter(filter)
         return unloadSetAttributes(model, documentsFromDb)
     }

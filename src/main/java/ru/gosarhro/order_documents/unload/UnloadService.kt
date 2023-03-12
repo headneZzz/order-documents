@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
 import ru.gosarhro.order_documents.entity.Order
 import ru.gosarhro.order_documents.repository.OrderRepository
-import ru.gosarhro.order_documents.session.SessionHolder
 import ru.gosarhro.order_documents.unload.dto.OrderDto
 import java.time.LocalDate
 
@@ -70,7 +69,8 @@ class UnloadService(private val orderRepository: OrderRepository) {
         )
 
         writer.write(head)
-        val orders = getAllOrdersByFilter(SessionHolder.filters[session.id]!!)
+        val filter = session.getAttribute("documentsFilter") as DocumentsFilter
+        val orders = getAllOrdersByFilter(filter)
         val orderDtos = orders.map { order ->
             OrderDto(
                 id = order.id!!,

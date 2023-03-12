@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "ru.gosarhro"
-version = "2.1.2"
+version = "2.1.3"
 description = "order-documents"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -29,6 +29,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

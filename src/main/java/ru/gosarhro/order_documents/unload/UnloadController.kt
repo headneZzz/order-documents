@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import ru.gosarhro.order_documents.entity.Order
-import ru.gosarhro.order_documents.session.SessionHolder
 import java.time.LocalDate
 
 @Controller
@@ -31,14 +30,14 @@ class UnloadController(private val unloadService: UnloadService) {
         session: HttpSession,
         pageable: Pageable
     ): String {
-        SessionHolder.filters[session.id] = documentsFilter
-        val filter = SessionHolder.filters[session.id]
-        if (filter!!.dateFrom.isEmpty()) {
+        val filter = documentsFilter
+        if (filter.dateFrom.isEmpty()) {
             filter.dateFrom = "2019-11-01"
         }
         if (filter.dateTo.isEmpty()) {
             filter.dateTo = LocalDate.now().toString()
         }
+        session.setAttribute("documentsFilter", documentsFilter)
         val documentsFromDb = unloadService.getAllOrdersByFilter(filter, pageable)
         return unloadSetAttributes(model, documentsFromDb)
     }
