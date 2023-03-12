@@ -28,6 +28,17 @@
             checkboxes[i].checked = false;
         }
     }
+
+    function selectPreview(selectedImg, index) {
+        const t = 'carousel' + selectedImg
+        const element = document.getElementById(t)
+        for (let i = 0; i < element.children.length; i++) {
+            const child = element.children.item(i)
+            child.children.item(0).classList.remove('active')
+        }
+        const child = element.children.item(index)
+        child.children.item(0).classList.add('active')
+    }
 </script>
 <div class="container">
     <button
@@ -76,22 +87,62 @@
         <br/>
         <div class="lightbox">
             <div class="row">
-                <div class="col-sm-4" th:each="digitized : ${digitizedList}">
+                <div class="col-sm-4" th:each="digitized, i : ${digitizedList}">
                     <div class="p-3 form-check">
                         <input class="form-check-input" type="checkbox" name="digitizedIds" th:value="${digitized.id}"
                                th:id="${digitized.id}">
                         <label class="form-check-label" th:for="${digitized.id}">
                             <img th:src="'/images/' + ${digitized.fileName}" class="img-fluid">
-                            <span th:text="${digitized.fileName}"></span>
                         </label>
+                        <div class="row justify-content-between p-2">
+                            <div class="col-4">
+                                <span class="fs-5" th:text="${digitized.fileName}"></span>
+                            </div>
+                            <div class="col-4 text-end">
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                        th:data-bs-target="'#modal' + ${digitized.fileName}"
+                                        th:attr="onclick=${'selectPreview('+ '''' +digitized.fileName + '''' + ', ' + i.index + ')'}">
+                                    Увеличить
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </form>
     <br/>
-</div>
 
+    <div th:each="digitized : ${digitizedList}">
+        <div class="modal fade" th:id="'modal' + ${digitized.fileName}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div th:id="'carousel' + ${digitized.fileName}" class="carousel carousel-dark slide">
+                            <div class="carousel-inner" th:each="tDigitized : ${digitizedList}">
+                                <div th:class="'carousel-item ' + ${digitized.fileName == tDigitized.fileName ? 'active' : ''}"
+                                     style="text-align: center; max-height: 90%">
+                                    <img th:src="'/images/' + ${tDigitized.fileName}">
+                                </div>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button"
+                                    th:data-bs-target="'#carousel' + ${digitized.fileName}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                    th:data-bs-target="'#carousel' + ${digitized.fileName}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div th:replace="~{fragments/scripts::scripts}"></div>
 </body>
 </html>

@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "ru.gosarhro"
-version = "2.1.1"
+version = "2.1.2"
 description = "order-documents"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
