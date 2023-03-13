@@ -14,7 +14,8 @@ class DigitizedController(
 
     @GetMapping("/digitized")
     fun getDigitized(model: Model, pageable: Pageable, @RequestParam(required = false) fod: String?): String {
-        val fodsPage = digitizedService.getDigitized(fod, pageable)
+        val newFod: String? = if (fod?.length == 0) null else fod
+        val fodsPage = digitizedService.getDigitized(newFod, pageable)
         model.addAttribute("fodsPage", fodsPage)
         model.addAttribute("fod", fod)
         return "digitized"

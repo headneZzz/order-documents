@@ -96,7 +96,8 @@
                         </label>
                         <div class="row justify-content-between p-2">
                             <div class="col-4">
-                                <span class="fs-5" th:text="${digitized.fileName}"></span>
+                                <span class="fs-5"
+                                      th:text="${#strings.arraySplit(digitized.fileName, '_')[#arrays.length(#strings.arraySplit(digitized.fileName, '_')) - 1]}"></span>
                             </div>
                             <div class="col-4 text-end">
                                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"

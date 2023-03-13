@@ -44,23 +44,31 @@
         </div>
     </div>
 
-    <nav th:if="${fodsPage.totalPages > 0}">
-        <ul class="pagination flex-wrap">
-            <li th:class="'page-item '+${fodsPage.hasPrevious() ? '' : 'disabled'}">
-                <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber() - 1})}"
-                   class="page-link">&larr;</a>
-            </li>
-            <li class="page-item">
-                <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber()})}"
-                   th:text="${fodsPage.getNumber() + 1}"
-                   class="page-link"></a>
-            </li>
-            <li th:class="'page-item '+${fodsPage.hasNext() ? '' : 'disabled'}">
-                <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber() + 1})}"
-                   class="page-link">&rarr;</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="row" th:if="${fodsPage.totalPages > 0}">
+        <div class="col-2">
+            <nav>
+                <ul class="pagination flex-wrap">
+                    <li th:class="'page-item '+${fodsPage.hasPrevious() ? '' : 'disabled'}">
+                        <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber() - 1})}"
+                           class="page-link">&larr;</a>
+                    </li>
+                    <li class="page-item">
+                        <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber()})}"
+                           th:text="${fodsPage.getNumber() + 1}"
+                           class="page-link"></a>
+                    </li>
+                    <li th:class="'page-item '+${fodsPage.hasNext() ? '' : 'disabled'}">
+                        <a th:href="@{/digitized(fod=${fod}, size=${fodsPage.size}, page=${fodsPage.getNumber() + 1})}"
+                           class="page-link">&rarr;</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="col p-2">
+            <h5 th:utext="'Всего страниц: ' + ${fodsPage.totalPages}">...</h5>
+        </div>
+    </div>
 </div>
 <div th:replace="fragments/scripts::scripts"></div>
 </body>

@@ -23,8 +23,13 @@
          class="alert alert-success" role="alert">
         ...
     </div>
-    <div th:if="${warningMessage}"
-         th:utext="${warningMessage}"
+    <div th:if="${maxOrderSizeMessage}"
+         th:utext="${maxOrderSizeMessage}"
+         class="alert alert-warning" role="alert">
+
+    </div>
+    <div th:if="${timeoutMessage}"
+         th:utext="${timeoutMessage}"
          class="alert alert-warning" role="alert">
 
     </div>
@@ -40,7 +45,7 @@
             <h4>Ваш сохранённый список дел: </h4>
         </div>
         <div class="col-4 text-end">
-            <a href="/digitized" th:class="'btn btn-primary btn-lg ' + ${warningMessage != null ? 'disabled' : ''}"
+            <a href="/digitized" th:class="'btn btn-primary btn-lg ' + ${maxOrderSizeMessage != null ? 'disabled' : ''}"
                type="button">Добавить</a>
         </div>
     </div>

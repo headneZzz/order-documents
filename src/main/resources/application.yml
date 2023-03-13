@@ -23,5 +23,6 @@ server:
 
 app:
   config:
+    reader-timeout: 120 # минуты / minutes
     max-order-size: 20
     reading-room-path: D:\ГосАрхив\Тест\Читальный зал
